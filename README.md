@@ -16,7 +16,7 @@ custom:
       - production
       - staging
 
-    nameTemplate: $[functionName].$[alertId] # Optionally - naming template for alerts, can be overwritten in definitions
+    nameTemplate: $[serviceName]_$[stage].$[functionName].$[alertName] # Optionally - naming template for alerts, can be overwritten in definitions
 
     definitions:  # these defaults are merged with your definitions
       - id: not_running
@@ -30,7 +30,7 @@ custom:
           - 42  # id of service 2
       - id: foo_bar.baz
         description: 'Alert when baz immediately goes above 5'
-        nameTemplate: $[functionName].foo_bar.baz # Optionally - naming template for the alarms, overwrites globally defined one
+        nameTemplate: $[stage].$[functionName].foo_bar.baz # Optionally - naming template for the alarms, overwrites globally defined one
         rearm: 600 # Specifies the minimum amount of time between sending alert notifications, in seconds. Defaults to 600
         conditions:
           - metric: 'foo.bar.baz'

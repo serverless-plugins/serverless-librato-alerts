@@ -1,6 +1,6 @@
-import { ILibratoAlert } from './ILibratoAlert';
+import { PartialAlert } from './ILibratoAlert';
 
 export interface IFunction {
   name: string;
-  'librato-alerts'?: ILibratoAlert[];
+  libratoAlerts?: (string | PartialAlert)[];
 }

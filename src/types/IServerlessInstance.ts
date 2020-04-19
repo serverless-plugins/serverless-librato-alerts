@@ -1,22 +1,21 @@
 import { IFunction } from './IFunction';
-import { ILibratoAlert } from './ILibratoAlert';
+import { IGlobalLibratoAlertSettings } from './IGlobalLibratoAlertSettings';
 
 export interface IServerlessInstance {
   service: {
     service: string;
     provider: {
-      stage: string;
-      stackName: string;
+      stage?: string;
+      stackName?: string;
     };
     custom: {
-      'librato-alerts': {
-        stages?: string[];
-        definitions?: ILibratoAlert[];
-        global?: string[];
-      };
+      libratoAlerts?: IGlobalLibratoAlertSettings;
     };
     getAllFunctions(): string[];
-    getFunction(name: string): IFunction[];
+    getFunction(name: string): IFunction;
+  };
+  config?: {
+    stage?: string;
   };
   providers: {
     librato: {
