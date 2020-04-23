@@ -76,7 +76,7 @@ export class LibratoService {
     const alerts: IAlertResponse[] = [];
     let response = await this.listAlertsPaged(search, paging);
     alerts.push(...response.alerts);
-    while (paging.length === response.query.length && alerts.length < response.query.total && response.query.offset + response.query.length < response.query.total) {
+    while (paging.length === response.query.length && alerts.length < response.query.found && response.query.offset + response.query.length < response.query.found) {
       paging.offset = response.query.offset + response.query.length;
       // eslint-disable-next-line no-await-in-loop
       response = await this.listAlertsPaged(search, paging);
