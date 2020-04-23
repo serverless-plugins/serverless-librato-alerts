@@ -2,6 +2,22 @@
 
 Serverless plugin for [Librato Alerts](https://www.librato.com/docs/kb/alert/)
 
+## Configuration
+
+Alerts can be defined on a global level under the `custom` section. Definitions can be overwritten per function and function specific alerts can be defined within the function definition.
+
+### Template strings
+Template strings can contain the following tokens:
+
+| Token             | Description                                                                                                                                             |
+|-------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `$[stackName]`    | Stack name if defined (provider.stackName). If undefined, defaults to: `<service>-<stage>`                                                              |
+| `$[serviceName]`  | Name of service (service.name)                                                                                                                          |
+| `$[stage]`        | Name of the stage. Value obtained in this order: --stage CLI option, config.stage, provider.stage, or default to `dev`                                  |
+| `$[functionName]` | Name of function                                                                                                                                        |
+| `$[functionId]`   | Logical id of the function. This is the name of the function with `-` replaced with `Dash`, `_` replaced with `Underscore`, and `Function` suffix added |
+| `$[alertName]`    | Name of alert                                                                                                                                           |
+
 ## Usage
 
 ```yaml
@@ -16,13 +32,14 @@ custom:
       - production
       - staging
 
-    nameTemplate: $[serviceName]_$[stage].$[functionName].$[alertName] # Optionally - naming template for alerts, can be overwritten in definitions
+    nameTemplate: "$[serviceName]_$[stage].$[functionName].$[alertName]" # Optionally - naming template for alerts, can be overwritten in definitions
+    nameSearchForUpdatesAndDeletes: "$[serviceName]_$[stage].*" # Should be based on the nameTemplate. Only supports $[stackName], $[serviceName], and $[stage]
 
     definitions:  # these defaults are merged with your definitions
       - id: not_running
         description: 'Alert when function has not run in the last hour. Repeat alert every 15 minutes until cleared'
         conditions:
-          - metric: $[functionName].overall_time
+          - metric: "$[functionName].overall_time"
             type: 'absent'
             threshold: 60
         notify:

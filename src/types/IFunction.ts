@@ -1,4 +1,4 @@
-import { PartialAlert } from './ILibratoAlert';
+import { PartialAlert } from './config/ILibratoAlert';
 
 export interface IFunction {
   name: string;

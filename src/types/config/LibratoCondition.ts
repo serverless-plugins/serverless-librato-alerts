@@ -1,7 +1,9 @@
+import { ITag } from '../librato';
+
 export interface ILibratoConditionBase {
   metric: string;
   threshold?: number;
-  tags?: { [tag: string]: string | boolean };
+  tags?: ITag[];
   detectReset?: boolean;
 }
 
