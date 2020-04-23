@@ -353,7 +353,7 @@ export class LibratoAlertIndex {
         // eslint-disable-next-line @typescript-eslint/camelcase
         metric_name: condition.metric,
         type: condition.type,
-        threshold: condition.threshold,
+        duration: condition.duration,
         tags: condition.tags,
         // eslint-disable-next-line @typescript-eslint/camelcase
         detect_reset: condition.detectReset,

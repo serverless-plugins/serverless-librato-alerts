@@ -2,8 +2,8 @@ import { ITag } from '../librato';
 
 export interface ILibratoConditionBase {
   metric: string;
-  threshold?: number;
   tags?: ITag[];
+  duration?: number;
   detectReset?: boolean;
 }
 
@@ -13,8 +13,8 @@ export interface ILibratoAbsentCondition extends ILibratoConditionBase {
 
 export interface ILibratoAboveBelowCondition extends ILibratoConditionBase {
   type: 'above' | 'below';
+  threshold?: number;
   summaryFunction: 'min' | 'max' | 'average' | 'sum' | 'count' | 'derivative';
-  duration?: number;
 }
 
 export type LibratoCondition = ILibratoAbsentCondition | ILibratoAboveBelowCondition;
