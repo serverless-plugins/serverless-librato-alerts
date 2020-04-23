@@ -41,7 +41,7 @@ export class LibratoAlertIndex {
 
   protected readonly defaultNameTemplate = '$[serviceName]_$[stage].$[functionName].$[alertName]';
 
-  protected readonly defaultNameSearchForUpdatesAndDeletes = '$[serviceName]_$[stage].*';
+  protected readonly defaultNameSearchForUpdatesAndDeletes = '$[serviceName]_$[stage].';
 
   public constructor(serverless: IServerlessInstance, options: IServerlessOptions) {
     this.serverless = serverless;
