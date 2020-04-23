@@ -2,7 +2,7 @@ import { ITag } from './ITag';
 
 export interface ICondition {
   id: number;
-  source: string;
+  source: string | null;
   created_at: number;
   updated_at: number;
 
