@@ -32,7 +32,10 @@ export class LibratoService {
     const response = await fetch('https://metrics-api.librato.com/v1/alerts', {
       method: 'POST',
       body: JSON.stringify(request),
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
+        'Content-Type': 'application/json',
+      },
     });
 
     if (response.ok) {
@@ -46,7 +49,10 @@ export class LibratoService {
     const response = await fetch(`https://metrics-api.librato.com/v1/alerts/${request.id}`, {
       method: 'PUT',
       body: JSON.stringify(request),
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
+        'Content-Type': 'application/json',
+      },
     });
 
     if (response.ok) {
@@ -59,7 +65,10 @@ export class LibratoService {
   public async deleteAlert(id: number): Promise<void> {
     const response = await fetch(`https://metrics-api.librato.com/v1/alerts/${id}`, {
       method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
+        'Content-Type': 'application/json',
+      },
     });
 
     if (response.ok) {
@@ -107,7 +116,10 @@ export class LibratoService {
 
     const response = await fetch(url.href, {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
+        'Content-Type': 'application/json',
+      },
     });
 
     if (response.ok) {
