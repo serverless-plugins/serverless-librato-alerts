@@ -32,7 +32,8 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "lint": "prettier --write *.json .eslintrc.js .prettierrc.js && eslint --fix --ext .ts src"
+    "lint": "prettier --write *.json .eslintrc.js .prettierrc.js && eslint --fix --ext .ts src",
+    "prepublishOnly": "rm -rf dist && npm run build && npm run lint && npm run test"
   },
   "lint-staged": {
     "./*.js": ["eslint --fix"],

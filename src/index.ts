@@ -28,7 +28,7 @@ interface IReplaceTemplatesOptions {
   alertName: string;
 }
 
-export class LibratoAlertIndex {
+class LibratoAlertIndex {
   public readonly hooks: IServerlessHooks;
 
   protected readonly serverless: IServerlessInstance;
@@ -376,3 +376,5 @@ export class LibratoAlertIndex {
     return result;
   }
 }
+
+export = LibratoAlertIndex;
