@@ -101,7 +101,7 @@ ${JSON.stringify(request, null, 1)}
 Response (${response.status}): ${JSON.stringify(body, null, 1)}`);
   }
 
-  public async updateAlert(request: IUpdateAlertRequest): Promise<IAlertResponse> {
+  public async updateAlert(request: IUpdateAlertRequest): Promise<void> {
     const response = await fetch(`https://metrics-api.librato.com/v1/alerts/${request.id}`, {
       method: 'PUT',
       body: JSON.stringify(request),
@@ -111,9 +111,15 @@ Response (${response.status}): ${JSON.stringify(body, null, 1)}`);
       },
     });
 
-    const body = await response.json();
     if (response.ok) {
-      return body;
+      return;
+    }
+
+    let body = '';
+    try {
+      body = await response.json();
+    } catch (ex) {
+      console.error(ex);
     }
 
     throw new Error(`Error updating alert: 
@@ -132,9 +138,15 @@ Response (${response.status}): ${JSON.stringify(body, null, 1)}`);
       },
     });
 
-    const body = await response.json();
     if (response.ok) {
-      return body;
+      return;
+    }
+
+    let body = '';
+    try {
+      body = await response.json();
+    } catch (ex) {
+      console.error(ex);
     }
 
     throw new Error(`Error deleting alert:

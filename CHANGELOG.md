@@ -1,3 +1,8 @@
+### 1.0.4
+  * Fix searching for existing alerts - replace tokens in search text
+  * Fix trying to parse json response when updating issues
+  * Fix issues trying to determine if an existing alert has an update
+
 ### 1.0.3
   * Add environment variables tokens and function tokens to template names
   * Add string modifier functions for template names

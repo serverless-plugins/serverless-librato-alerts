@@ -273,7 +273,15 @@ class LibratoAlertIndex {
     const globalSettings = this.getGlobalSettings();
 
     const alertConfigurations = this.getAlertsFromConfiguration();
-    const existingAlerts = await libratoService.listAlerts(globalSettings?.nameSearchForUpdatesAndDeletes || this.defaultNameSearchForUpdatesAndDeletes);
+    const existingAlertSearchText = this.replaceTemplates({
+      input: globalSettings?.nameSearchForUpdatesAndDeletes || this.defaultNameSearchForUpdatesAndDeletes,
+      alertName: '',
+      environment: this.serverless.service.provider.environment || {},
+      functionId: '',
+      functionName: '',
+    });
+    this.serverless.cli.log(`Info: Fetching existing librato alerts... Search text: ${existingAlertSearchText}`);
+    const existingAlerts = await libratoService.listAlerts(existingAlertSearchText);
     const existingAlertsByName = _.keyBy(existingAlerts, 'name');
 
     const alertsToAdd: ICreateAlertRequest[] = [];
@@ -364,6 +372,7 @@ class LibratoAlertIndex {
   private getUpdateAlertRequest(alertConfiguration: PartialAlert, existingAlert: IAlertResponse): IUpdateAlertRequest | null {
     const conditions: UpdateCondition[] = [];
     const alertConfigurationConditions = alertConfiguration.conditions || [];
+    let hasNewCondition = false;
     for (const condition of alertConfigurationConditions) {
       const createCondition = this.getCreateAlertCondition(condition);
 
@@ -371,17 +380,20 @@ class LibratoAlertIndex {
         // eslint-disable-next-line @typescript-eslint/camelcase
         metric_name: createCondition.metric_name,
         type: createCondition.type,
-        threshold: createCondition.threshold,
         duration: createCondition.duration,
       });
 
       if (existingCondition && !_.find(conditions, { id: existingCondition.id })) {
-        conditions.push({
+        const mergedCondition = {
           ...existingCondition,
           ...createCondition,
-        });
+        };
+        conditions.push(mergedCondition);
+
+        hasNewCondition = hasNewCondition || !_.isMatch(existingCondition, mergedCondition) || !_.isMatch(mergedCondition, existingCondition);
       } else {
         conditions.push(createCondition);
+        hasNewCondition = true;
       }
     }
 
@@ -412,12 +424,12 @@ class LibratoAlertIndex {
     };
 
     const isEqual =
-      _.isEqual(request.conditions, existingAlert.conditions) &&
-      _.isEqual(request.attributes, existingAlert.attributes) &&
       request.name === existingAlert.name &&
       request.description === existingAlert.description &&
-      request.rearm_seconds === existingAlert.rearm_seconds &&
-      _.isEqual(_.sortBy(request.services), _.sortBy(_.map(existingAlert.services, 'id')));
+      (!request.rearm_seconds || request.rearm_seconds === existingAlert.rearm_seconds) &&
+      hasNewCondition &&
+      ((!request.attributes && !existingAlert.attributes) || _.isEqual(request.attributes, existingAlert.attributes)) &&
+      ((!request.services && !existingAlert.services) || _.isEqual(_.sortBy(request.services), _.sortBy(_.map(existingAlert.services, 'id'))));
 
     if (isEqual) {
       return null;
