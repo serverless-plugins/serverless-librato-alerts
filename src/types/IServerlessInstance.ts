@@ -7,6 +7,7 @@ export interface IServerlessInstance {
     provider: {
       stage?: string;
       stackName?: string;
+      environment?: { [name: string]: string };
     };
     custom: {
       libratoAlerts?: IGlobalLibratoAlertSettings;

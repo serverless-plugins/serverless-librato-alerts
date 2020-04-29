@@ -28,6 +28,7 @@ interface IReplaceTemplatesOptions {
   functionName: string;
   functionId: string;
   alertName: string;
+  environment: { [name: string]: string };
 }
 
 class LibratoAlertIndex {
@@ -68,18 +69,43 @@ class LibratoAlertIndex {
     return `${this.serverless.service.service}-${this.stage}`;
   }
 
-  private replaceTemplates({ input, functionName, functionId, alertName }: IReplaceTemplatesOptions): string {
+  private replaceTemplates({ input, functionName, functionId, alertName, environment }: IReplaceTemplatesOptions): string {
     if (!input) {
       return input;
     }
 
     return input
+      .replace(/\$\[env:([a-zA-Z_-]+)\]/g, (_match: string, environmentVariable: string) => {
+        if (typeof environment[environmentVariable] === 'undefined') {
+          throw new Error(`Unable to find environment variable: ${environmentVariable}`);
+        }
+
+        return environment[environmentVariable];
+      })
       .replace('$[alertName]', alertName)
       .replace('$[stackName]', this.stackName)
       .replace('$[serviceName]', this.serverless.service.service)
       .replace('$[stage]', this.stage)
       .replace('$[functionName]', functionName)
-      .replace('$[functionId]', functionId);
+      .replace('$[functionId]', functionId)
+      .replace(/\$\(([a-zA-Z]+) ([a-zA-Z_-]+)\)/g, (_match: string, modifier: string, value: string) => {
+        switch (modifier) {
+          case 'kebabCase':
+            return _.kebabCase(value);
+          case 'snakeCase':
+            return _.snakeCase(value);
+          case 'lowerFirst':
+            return _.lowerFirst(value);
+          case 'toLower':
+            return _.toLower(value);
+          case 'upperFirst':
+            return _.upperFirst(value);
+          case 'toUpper':
+            return _.toUpper(value);
+          default:
+            return value;
+        }
+      });
   }
 
   private isEnabledForStage(): boolean {
@@ -141,6 +167,11 @@ class LibratoAlertIndex {
         alertsByName[alert.name] = alert;
       }
 
+      const environment = {
+        ...this.serverless.service.provider.environment,
+        ...functionObj.environment,
+      };
+
       for (const alert of Object.values(alertsByName)) {
         const nameTemplate = alert.nameTemplate || this.defaultNameTemplate;
         const fullName = this.replaceTemplates({
@@ -148,6 +179,7 @@ class LibratoAlertIndex {
           functionName,
           functionId: functionLogicalId,
           alertName: alert.name,
+          environment,
         });
 
         // Perform template replacement for condition metric name and tag values
@@ -165,6 +197,7 @@ class LibratoAlertIndex {
                     functionName,
                     functionId: functionLogicalId,
                     alertName: alert.name,
+                    environment,
                   }),
                 );
               }
@@ -183,6 +216,7 @@ class LibratoAlertIndex {
               functionName,
               functionId: functionLogicalId,
               alertName: alert.name,
+              environment,
             });
           } else {
             let displayName: string | undefined;
@@ -192,6 +226,7 @@ class LibratoAlertIndex {
                 functionName,
                 functionId: functionLogicalId,
                 alertName: alert.name,
+                environment,
               });
             }
 
@@ -202,6 +237,7 @@ class LibratoAlertIndex {
                 functionName,
                 functionId: functionLogicalId,
                 alertName: alert.name,
+                environment,
               }),
               displayName,
             };

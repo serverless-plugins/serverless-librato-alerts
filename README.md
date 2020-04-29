@@ -17,6 +17,18 @@ Template strings can contain the following tokens:
 | `$[functionName]` | Name of function                                                                                                                                        |
 | `$[functionId]`   | Logical id of the function. This is the name of the function with `-` replaced with `Dash`, `_` replaced with `Underscore`, and `Function` suffix added |
 | `$[alertName]`    | Name of alert                                                                                                                                           |
+| `$[env:<name>]`   | Access an environment variable value (will not decode SSM parameter store references)                                                                   |
+
+Template strings can contain the following function tokens:
+
+| Function Token          | Description                                                                  |
+|-------------------------|------------------------------------------------------------------------------|
+| `$(camelCase <value>)`  | Converts `<value>` to camel case                                             |
+| `$(kebabCase <value>)`  | Converts `<value>` to kebab case                                             |
+| `$(lowerFirst <value>)` | Converts the first character of `<value>` to lower case                      |
+| `$(toLower <value>)`    | Converts `<value>`, as a whole, to lower case just like String#toLowerCase.  |
+| `$(upperFirst <value>)` | Converts the first character of `<value>` to upper case                      |
+| `$(toUpper <value>)`    | Converts `<value>`, as a whole, to upper case just like String#toUpperCase.  |
 
 ## Usage
 
@@ -39,7 +51,7 @@ custom:
       - name: not_running
         description: 'Alert when function has not run in the last hour. Repeat alert every 15 minutes until cleared'
         conditions:
-          - metric: "$[functionName].overall_time"
+          - metric: "$(upperFirst $[functionName]).overall_time"
             type: 'absent'
             duration: 3600
         rearm: 900

@@ -1,3 +1,7 @@
+### 1.0.3
+  * Add environment variables tokens and function tokens to template names
+  * Add string modifier functions for template names
+
 ### 1.0.2
   * Remove IDE directories from package
   * Make errors from librato service useful
