@@ -52,6 +52,9 @@ custom:
         rearm: 600 # Specifies the minimum amount of time between sending alert notifications, in seconds. Defaults to 600s
         conditions:
           - metric: 'foo.bar.baz'
+              create: true # Control the properties of the metric if it does not exist and must be created
+              type: 'guage'
+              period: 60
             type: 'above' # above, below, absent
             tags:
               - name: environment

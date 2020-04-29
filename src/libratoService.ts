@@ -3,7 +3,9 @@ import { URL } from 'url';
 import type {
   IAlertResponse, //
   ICreateAlertRequest,
+  ICreateMetricRequest,
   IListAlertsResponse,
+  IRetrieveMetricResponse,
   IUpdateAlertRequest,
 } from './types/librato';
 import { IPagedRequest } from './types/librato/IPagedRequest';
@@ -28,8 +30,57 @@ export class LibratoService {
     this.token = tokenParam;
   }
 
+  public async createMetric(request: ICreateMetricRequest): Promise<IAlertResponse> {
+    const url = `https://metrics-api.librato.com/v1/metrics/${request.name}`;
+    const response = await fetch(url, {
+      method: 'PUT',
+      body: JSON.stringify(request),
+      headers: {
+        Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const body = await response.json();
+    if (response.ok) {
+      return body;
+    }
+
+    throw new Error(`Error creating metric: 
+Request: PUT ${url}
+${JSON.stringify(request, null, 1)}
+
+Response (${response.status}): ${JSON.stringify(body, null, 1)}`);
+  }
+
+  public async retrieveMetric(name: string): Promise<IRetrieveMetricResponse | null> {
+    const url = `https://metrics-api.librato.com/v1/metrics/${name}`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const body = await response.json();
+    if (response.ok) {
+      return body;
+    }
+
+    if (response.status === 404) {
+      return null;
+    }
+
+    throw new Error(`Error creating metric: 
+Request: GET ${url}
+
+Response (${response.status}): ${JSON.stringify(body, null, 1)}`);
+  }
+
   public async createAlert(request: ICreateAlertRequest): Promise<IAlertResponse> {
-    const response = await fetch('https://metrics-api.librato.com/v1/alerts', {
+    const url = 'https://metrics-api.librato.com/v1/alerts';
+    const response = await fetch(url, {
       method: 'POST',
       body: JSON.stringify(request),
       headers: {
@@ -38,11 +89,16 @@ export class LibratoService {
       },
     });
 
+    const body = await response.json();
     if (response.ok) {
-      return response.json();
+      return body;
     }
 
-    throw new Error(response.statusText);
+    throw new Error(`Error creating alert: 
+Request: POST ${url}
+${JSON.stringify(request, null, 1)}
+
+Response (${response.status}): ${JSON.stringify(body, null, 1)}`);
   }
 
   public async updateAlert(request: IUpdateAlertRequest): Promise<IAlertResponse> {
@@ -55,15 +111,20 @@ export class LibratoService {
       },
     });
 
+    const body = await response.json();
     if (response.ok) {
-      return response.json();
+      return body;
     }
 
-    throw new Error(response.statusText);
+    throw new Error(`Error updating alert: 
+Request: ${JSON.stringify(request, null, 1)}
+
+Response (${response.status}): ${JSON.stringify(body, null, 1)}`);
   }
 
   public async deleteAlert(id: number): Promise<void> {
-    const response = await fetch(`https://metrics-api.librato.com/v1/alerts/${id}`, {
+    const url = `https://metrics-api.librato.com/v1/alerts/${id}`;
+    const response = await fetch(url, {
       method: 'DELETE',
       headers: {
         Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
@@ -71,11 +132,15 @@ export class LibratoService {
       },
     });
 
+    const body = await response.json();
     if (response.ok) {
-      return response.json();
+      return body;
     }
 
-    throw new Error(response.statusText);
+    throw new Error(`Error deleting alert:
+Request: DELETE https://metrics-api.librato.com/v1/alerts/${id}
+
+Response (${response.status}): ${JSON.stringify(body, null, 1)}`);
   }
 
   public async listAlerts(search: string): Promise<IAlertResponse[]> {
@@ -122,10 +187,14 @@ export class LibratoService {
       },
     });
 
+    const body = await response.json();
     if (response.ok) {
-      return response.json();
+      return body;
     }
 
-    throw new Error(response.statusText);
+    throw new Error(`Error listing alert:
+Request: GET ${url.href}
+
+Response (${response.status}): ${JSON.stringify(body, null, 1)}`);
   }
 }

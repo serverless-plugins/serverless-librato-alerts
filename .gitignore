@@ -36,3 +36,4 @@ nbproject
 package-lock.json
 
 dist/
+.serverless

@@ -1,7 +1,8 @@
 import { ITag } from '../librato';
+import { ICreateMetric } from './ICreateMetric';
 
 export interface ILibratoConditionBase {
-  metric: string;
+  metric: string | ICreateMetric;
   tags?: ITag[];
   duration?: number;
   detectReset?: boolean;

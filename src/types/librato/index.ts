@@ -6,3 +6,5 @@ export * from './IListAlertsResponse';
 export * from './IService';
 export * from './ITag';
 export * from './IUpdateAlertRequest';
+export * from './ICreateMetricRequest';
+export * from './IRetrieveMetricResponse';

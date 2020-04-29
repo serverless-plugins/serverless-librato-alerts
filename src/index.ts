@@ -16,10 +16,12 @@ import type {
   IAlertAttributes,
   IAlertResponse,
   ICreateAlertRequest,
+  ICreateMetricRequest,
   ITag,
   IUpdateAlertRequest,
   UpdateCondition,
 } from './types/librato';
+import { ICreateMetric } from './types/config/ICreateMetric';
 
 interface IReplaceTemplatesOptions {
   input: string;
@@ -67,6 +69,10 @@ class LibratoAlertIndex {
   }
 
   private replaceTemplates({ input, functionName, functionId, alertName }: IReplaceTemplatesOptions): string {
+    if (!input) {
+      return input;
+    }
+
     return input
       .replace('$[alertName]', alertName)
       .replace('$[stackName]', this.stackName)
@@ -170,16 +176,40 @@ class LibratoAlertIndex {
             }
           }
 
-          const metricName = this.replaceTemplates({
-            input: condition.metric,
-            functionName,
-            functionId: functionLogicalId,
-            alertName: alert.name,
-          });
+          let configMetric: string | ICreateMetric;
+          if (typeof condition.metric === 'string') {
+            configMetric = this.replaceTemplates({
+              input: condition.metric,
+              functionName,
+              functionId: functionLogicalId,
+              alertName: alert.name,
+            });
+          } else {
+            let displayName: string | undefined;
+            if (condition.metric.displayName) {
+              displayName = this.replaceTemplates({
+                input: condition.metric.displayName,
+                functionName,
+                functionId: functionLogicalId,
+                alertName: alert.name,
+              });
+            }
+
+            configMetric = {
+              ...condition.metric,
+              name: this.replaceTemplates({
+                input: condition.metric.name,
+                functionName,
+                functionId: functionLogicalId,
+                alertName: alert.name,
+              }),
+              displayName,
+            };
+          }
 
           conditions.push({
             ...condition,
-            metric: metricName,
+            metric: configMetric,
             tags,
           });
         }
@@ -212,19 +242,53 @@ class LibratoAlertIndex {
 
     const alertsToAdd: ICreateAlertRequest[] = [];
     const alertsToUpdate: IUpdateAlertRequest[] = [];
+    const metricsToAdd: ICreateMetricRequest[] = [];
 
     for (const alertConfiguration of alertConfigurations) {
       const existingAlert = existingAlertsByName[alertConfiguration.name];
+      let added = false;
       if (existingAlert) {
         const updateAlertRequest = this.getUpdateAlertRequest(alertConfiguration, existingAlert);
 
         // NOTE: A null updateAlertRequest means there were no changes
         if (updateAlertRequest) {
           alertsToUpdate.push(updateAlertRequest);
+          added = true;
         }
       } else {
         const createAlertRequest = this.getCreateAlertRequest(alertConfiguration);
         alertsToAdd.push(createAlertRequest);
+        added = true;
+      }
+
+      if (added && alertConfiguration.conditions) {
+        for (const condition of alertConfiguration.conditions) {
+          if (typeof condition.metric === 'string') {
+            const exists = _.some(metricsToAdd, {
+              name: condition.metric,
+            });
+
+            if (!exists) {
+              metricsToAdd.push({
+                name: condition.metric,
+                type: 'gauge',
+                period: 60,
+              });
+            }
+          } else if (condition.metric.create !== false) {
+            const exists = _.some(metricsToAdd, {
+              name: condition.metric.name,
+            });
+
+            if (!exists) {
+              metricsToAdd.push({
+                ...condition.metric,
+                type: condition.metric.type || 'gauge',
+                period: condition.metric.period || 60,
+              });
+            }
+          }
+        }
       }
     }
 
@@ -234,6 +298,17 @@ class LibratoAlertIndex {
         this.serverless.cli.log(`Info: Deleting librato alert: ${existingAlert.id} - ${existingAlert.name}`);
         // eslint-disable-next-line no-await-in-loop
         await libratoService.deleteAlert(existingAlert.id);
+      }
+    }
+
+    for (const metricRequest of metricsToAdd) {
+      this.serverless.cli.log(`Info: Checking if metric exists: ${metricRequest.name}`);
+      // eslint-disable-next-line no-await-in-loop
+      const existingMetric = await libratoService.retrieveMetric(metricRequest.name);
+      if (!existingMetric) {
+        this.serverless.cli.log(`Info: Creating new metric: ${metricRequest.name}`);
+        // eslint-disable-next-line no-await-in-loop
+        await libratoService.createMetric(metricRequest);
       }
     }
 
@@ -347,11 +422,18 @@ class LibratoAlertIndex {
   }
 
   private getCreateAlertCondition(condition: ILibratoAbsentCondition | ILibratoAboveBelowCondition): CreateAlertCondition {
+    let metricName: string;
+    if (typeof condition.metric === 'string') {
+      metricName = condition.metric;
+    } else {
+      metricName = condition.metric.name;
+    }
+
     let result: CreateAlertCondition;
     if (condition.type === 'absent') {
       result = {
         // eslint-disable-next-line @typescript-eslint/camelcase
-        metric_name: condition.metric,
+        metric_name: metricName,
         type: condition.type,
         duration: condition.duration,
         tags: condition.tags,
@@ -361,7 +443,7 @@ class LibratoAlertIndex {
     } else {
       result = {
         // eslint-disable-next-line @typescript-eslint/camelcase
-        metric_name: condition.metric,
+        metric_name: metricName,
         type: condition.type,
         threshold: condition.threshold,
         tags: condition.tags,
