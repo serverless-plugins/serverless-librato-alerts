@@ -10,5 +10,6 @@ export interface ICreateAlertRequest {
   services: number[];
   attributes?: IAlertAttributes;
   active?: boolean;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   rearm_seconds?: number;
 }

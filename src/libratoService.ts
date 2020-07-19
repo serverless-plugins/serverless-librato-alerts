@@ -36,13 +36,17 @@ export class LibratoService {
       method: 'PUT',
       body: JSON.stringify(request),
       headers: {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         'Content-Type': 'application/json',
       },
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const body = await response.json();
     if (response.ok) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return body;
     }
 
@@ -58,13 +62,17 @@ Response (${response.status}): ${JSON.stringify(body, null, 1)}`);
     const response = await fetch(url, {
       method: 'GET',
       headers: {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         'Content-Type': 'application/json',
       },
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const body = await response.json();
     if (response.ok) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return body;
     }
 
@@ -84,13 +92,17 @@ Response (${response.status}): ${JSON.stringify(body, null, 1)}`);
       method: 'POST',
       body: JSON.stringify(request),
       headers: {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         'Content-Type': 'application/json',
       },
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const body = await response.json();
     if (response.ok) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return body;
     }
 
@@ -106,7 +118,9 @@ Response (${response.status}): ${JSON.stringify(body, null, 1)}`);
       method: 'PUT',
       body: JSON.stringify(request),
       headers: {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         'Content-Type': 'application/json',
       },
     });
@@ -117,6 +131,7 @@ Response (${response.status}): ${JSON.stringify(body, null, 1)}`);
 
     let body = '';
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       body = await response.json();
     } catch (ex) {
       console.error(ex);
@@ -133,7 +148,9 @@ Response (${response.status}): ${JSON.stringify(body, null, 1)}`);
     const response = await fetch(url, {
       method: 'DELETE',
       headers: {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         'Content-Type': 'application/json',
       },
     });
@@ -144,6 +161,7 @@ Response (${response.status}): ${JSON.stringify(body, null, 1)}`);
 
     let body = '';
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       body = await response.json();
     } catch (ex) {
       console.error(ex);
@@ -194,13 +212,17 @@ Response (${response.status}): ${JSON.stringify(body, null, 1)}`);
     const response = await fetch(url.href, {
       method: 'GET',
       headers: {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         'Content-Type': 'application/json',
       },
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const body = await response.json();
     if (response.ok) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return body;
     }
 

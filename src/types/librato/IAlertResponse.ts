@@ -10,6 +10,8 @@ export interface IAlertResponse {
   services: IService[];
   attributes?: IAlertAttributes;
   active?: boolean;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   rearm_seconds?: number;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   rearm_per_signal: boolean;
 }

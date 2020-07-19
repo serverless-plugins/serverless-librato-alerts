@@ -1,3 +1,6 @@
+### 1.0.5
+  * Update npms
+
 ### 1.0.4
   * Fix searching for existing alerts - replace tokens in search text
   * Fix trying to parse json response when updating issues

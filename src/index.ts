@@ -377,7 +377,7 @@ class LibratoAlertIndex {
       const createCondition = this.getCreateAlertCondition(condition);
 
       const existingCondition = _.find(existingAlert.conditions, {
-        // eslint-disable-next-line @typescript-eslint/camelcase
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         metric_name: createCondition.metric_name,
         type: createCondition.type,
         duration: createCondition.duration,
@@ -400,7 +400,7 @@ class LibratoAlertIndex {
     let attributes: IAlertAttributes | undefined;
     if (alertConfiguration.runbookUrl) {
       attributes = {
-        // eslint-disable-next-line @typescript-eslint/camelcase
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         runbook_url: alertConfiguration.runbookUrl,
       };
     }
@@ -418,7 +418,7 @@ class LibratoAlertIndex {
       description: alertConfiguration.description || '',
       conditions,
       attributes,
-      // eslint-disable-next-line @typescript-eslint/camelcase
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       rearm_seconds: alertConfiguration.rearmSeconds,
       services,
     };
@@ -444,7 +444,7 @@ class LibratoAlertIndex {
     let attributes: IAlertAttributes | undefined;
     if (alertConfiguration.runbookUrl) {
       attributes = {
-        // eslint-disable-next-line @typescript-eslint/camelcase
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         runbook_url: alertConfiguration.runbookUrl,
       };
     }
@@ -461,7 +461,7 @@ class LibratoAlertIndex {
       description: alertConfiguration.description || '',
       conditions,
       attributes,
-      // eslint-disable-next-line @typescript-eslint/camelcase
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       rearm_seconds: alertConfiguration.rearmSeconds,
       services,
     };
@@ -480,24 +480,24 @@ class LibratoAlertIndex {
     let result: CreateAlertCondition;
     if (condition.type === 'absent') {
       result = {
-        // eslint-disable-next-line @typescript-eslint/camelcase
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         metric_name: metricName,
         type: condition.type,
         duration: condition.duration,
         tags: condition.tags,
-        // eslint-disable-next-line @typescript-eslint/camelcase
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         detect_reset: condition.detectReset,
       };
     } else {
       result = {
-        // eslint-disable-next-line @typescript-eslint/camelcase
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         metric_name: metricName,
         type: condition.type,
         threshold: condition.threshold,
         tags: condition.tags,
-        // eslint-disable-next-line @typescript-eslint/camelcase
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         detect_reset: condition.detectReset,
-        // eslint-disable-next-line @typescript-eslint/camelcase
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         summary_function: condition.summaryFunction,
         duration: condition.duration,
       };
