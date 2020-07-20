@@ -15,7 +15,7 @@ export interface ILibratoAbsentCondition extends ILibratoConditionBase {
 export interface ILibratoAboveBelowCondition extends ILibratoConditionBase {
   type: 'above' | 'below';
   threshold?: number;
-  summaryFunction: 'min' | 'max' | 'average' | 'sum' | 'count' | 'derivative';
+  summaryFunction: 'min' | 'max' | 'average' | 'sum' | 'count' | 'derivative' | 'absolute_value';
 }
 
 export type LibratoCondition = ILibratoAbsentCondition | ILibratoAboveBelowCondition;

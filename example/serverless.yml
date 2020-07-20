@@ -35,3 +35,15 @@ functions:
     memorySize: 128
     reservedConcurrency: 1
     timeout: 120
+    libratoAlerts:
+      - name: request_error_1_hour
+        description: 'Alert when request error count goes above 30 in last 60 minutes. Repeat alert every 60 minutes until cleared'
+        conditions:
+          - metric: '$[functionName].request_error'
+            type: 'above'
+            summaryFunction: 'absolute_value'
+            threshold: 30
+            duration: 3600
+        rearm: 3600
+        notify:
+          - 160197

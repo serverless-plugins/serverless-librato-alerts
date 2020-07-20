@@ -16,6 +16,6 @@ export interface ICondition {
   detect_reset?: boolean;
   threshold?: number;
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  summary_function?: 'min' | 'max' | 'average' | 'sum' | 'count' | 'derivative';
+  summary_function?: 'min' | 'max' | 'average' | 'sum' | 'count' | 'derivative' | 'absolute_value';
   duration?: number;
 }
