@@ -54,14 +54,14 @@ custom:
           - metric: "$(upperFirst $[functionName]).overall_time"
             type: 'absent'
             duration: 3600
-        rearm: 900
+        rearmSeconds: 900
         notify:
           - 145 # id of service 1
           - 42  # id of service 2
       - name: foo_bar.baz
         description: 'Alert when baz immediately goes above 5'
         nameTemplate: $[stage].$[functionName].foo_bar.baz # Optionally - naming template for the alarms, overwrites globally defined one
-        rearm: 600 # Specifies the minimum amount of time between sending alert notifications, in seconds. Defaults to 600s
+        rearmSeconds: 600 # Specifies the minimum amount of time between sending alert notifications, in seconds. Defaults to 600s
         conditions:
           - metric: 'foo.bar.baz'
               create: true # Control the properties of the metric if it does not exist and must be created

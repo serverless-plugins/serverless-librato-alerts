@@ -20,7 +20,7 @@ custom:
           - metric: '$[functionName].overall_time'
             type: 'absent'
             duration: 3600
-        rearm: 900
+        rearmSeconds: 900
         notify:
           - 160197
     global:
@@ -44,6 +44,6 @@ functions:
             summaryFunction: 'absolute_value'
             threshold: 30
             duration: 3600
-        rearm: 3600
+        rearmSeconds: 3600
         notify:
           - 160197
