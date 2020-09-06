@@ -1,3 +1,6 @@
+### 1.0.7
+  * Update npms
+
 ### 1.0.6
   * Allow absolute_value as summaryFunction value
   
