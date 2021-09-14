@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+
 import { LibratoService } from './libratoService';
 import type {
   IServerlessHooks, //
@@ -11,6 +12,7 @@ import type {
   ILibratoAbsentCondition,
   PartialAlert,
 } from './types/config';
+import type { ICreateMetric } from './types/config/ICreateMetric';
 import type {
   CreateAlertCondition, //
   IAlertAttributes,
@@ -21,7 +23,6 @@ import type {
   IUpdateAlertRequest,
   UpdateCondition,
 } from './types/librato';
-import { ICreateMetric } from './types/config/ICreateMetric';
 
 interface IReplaceTemplatesOptions {
   input: string;
@@ -209,7 +210,7 @@ class LibratoAlertIndex {
             }
           }
 
-          let configMetric: string | ICreateMetric;
+          let configMetric: ICreateMetric | string;
           if (typeof condition.metric === 'string') {
             configMetric = this.replaceTemplates({
               input: condition.metric,
@@ -439,7 +440,7 @@ class LibratoAlertIndex {
   }
 
   private getCreateAlertRequest(alertConfiguration: PartialAlert): ICreateAlertRequest {
-    const conditions = (alertConfiguration.conditions || []).map((condition: ILibratoAbsentCondition | ILibratoAboveBelowCondition) => this.getCreateAlertCondition(condition));
+    const conditions = (alertConfiguration.conditions || []).map((condition: ILibratoAboveBelowCondition | ILibratoAbsentCondition) => this.getCreateAlertCondition(condition));
 
     let attributes: IAlertAttributes | undefined;
     if (alertConfiguration.runbookUrl) {
@@ -469,7 +470,7 @@ class LibratoAlertIndex {
     return request;
   }
 
-  private getCreateAlertCondition(condition: ILibratoAbsentCondition | ILibratoAboveBelowCondition): CreateAlertCondition {
+  private getCreateAlertCondition(condition: ILibratoAboveBelowCondition | ILibratoAbsentCondition): CreateAlertCondition {
     let metricName: string;
     if (typeof condition.metric === 'string') {
       metricName = condition.metric;

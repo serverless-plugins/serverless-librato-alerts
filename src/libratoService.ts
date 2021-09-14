@@ -1,5 +1,7 @@
-import fetch from 'node-fetch';
 import { URL } from 'url';
+
+import fetch from 'node-fetch';
+
 import type {
   IAlertResponse, //
   ICreateAlertRequest,
@@ -8,7 +10,7 @@ import type {
   IRetrieveMetricResponse,
   IUpdateAlertRequest,
 } from './types/librato';
-import { IPagedRequest } from './types/librato/IPagedRequest';
+import type { IPagedRequest } from './types/librato/IPagedRequest';
 
 export class LibratoService {
   protected email: string;
@@ -130,6 +132,7 @@ Response (${response.status}): ${JSON.stringify(body, null, 1)}`);
     }
 
     let body = '';
+
     try {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       body = await response.json();
@@ -160,6 +163,7 @@ Response (${response.status}): ${JSON.stringify(body, null, 1)}`);
     }
 
     let body = '';
+
     try {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       body = await response.json();

@@ -1,4 +1,4 @@
-import { ITag } from './ITag';
+import type { ITag } from './ITag';
 
 export interface ICondition {
   id: number;
@@ -10,12 +10,12 @@ export interface ICondition {
 
   // eslint-disable-next-line @typescript-eslint/naming-convention
   metric_name: string;
-  type: 'absent' | 'above' | 'below';
+  type: 'above' | 'absent' | 'below';
   tags?: ITag[];
   // eslint-disable-next-line @typescript-eslint/naming-convention
   detect_reset?: boolean;
   threshold?: number;
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  summary_function?: 'min' | 'max' | 'average' | 'sum' | 'count' | 'derivative' | 'absolute_value';
+  summary_function?: 'absolute_value' | 'average' | 'count' | 'derivative' | 'max' | 'min' | 'sum';
   duration?: number;
 }

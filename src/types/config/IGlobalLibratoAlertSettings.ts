@@ -1,4 +1,4 @@
-import { PartialAlert } from './ILibratoAlert';
+import type { PartialAlert } from './ILibratoAlert';
 
 export interface IGlobalLibratoAlertSettings {
   stages?: string[];

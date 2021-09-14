@@ -1,12 +1,13 @@
-import { LibratoCondition } from './LibratoCondition';
-import { PartiallyRequired } from '../PartiallyRequired';
+import type { PartiallyRequired } from '../PartiallyRequired';
+
+import type { LibratoCondition } from './LibratoCondition';
 
 export interface ILibratoAlert {
   name: string;
   nameTemplate?: string;
   description: string;
   conditions: LibratoCondition[];
-  notify: number | number[];
+  notify: number[] | number;
   rearmSeconds?: number;
   runbookUrl?: string;
 }

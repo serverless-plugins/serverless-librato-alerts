@@ -1,7 +1,7 @@
-import { IAlertAttributes } from './IAlertAttributes';
-import { ICondition } from './ICondition';
+import type { IAlertAttributes } from './IAlertAttributes';
+import type { ICondition } from './ICondition';
 
-export type UpdateCondition = Omit<ICondition, 'id' | 'source' | 'created_at' | 'updated_at'> & Partial<Pick<ICondition, 'id'>>;
+export type UpdateCondition = Omit<ICondition, 'created_at' | 'id' | 'source' | 'updated_at'> & Partial<Pick<ICondition, 'id'>>;
 
 export interface IUpdateAlertRequest {
   id: number;

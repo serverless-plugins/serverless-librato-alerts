@@ -1,7 +1,7 @@
 export interface ICreateMetric {
   name: string;
   create?: boolean;
-  type?: 'gauge' | 'composite';
+  type?: 'composite' | 'gauge';
   displayName?: string;
   description?: string;
   period?: number;
@@ -18,7 +18,7 @@ export interface ICreateMetric {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     display_stacked?: boolean;
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    summarize_function?: 'average' | 'sum' | 'count' | 'min' | 'max';
+    summarize_function?: 'average' | 'count' | 'max' | 'min' | 'sum';
     aggregate?: boolean;
   };
   composite?: string;

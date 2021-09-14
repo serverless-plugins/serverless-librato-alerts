@@ -1,4 +1,4 @@
 export interface IRetrieveMetricResponse {
-  type: 'gauge' | 'composite';
+  type: 'composite' | 'gauge';
   name: string;
 }

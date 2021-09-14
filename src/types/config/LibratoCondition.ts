@@ -1,8 +1,9 @@
-import { ITag } from '../librato';
-import { ICreateMetric } from './ICreateMetric';
+import type { ITag } from '../librato';
+
+import type { ICreateMetric } from './ICreateMetric';
 
 export interface ILibratoConditionBase {
-  metric: string | ICreateMetric;
+  metric: ICreateMetric | string;
   tags?: ITag[];
   duration?: number;
   detectReset?: boolean;
@@ -15,7 +16,7 @@ export interface ILibratoAbsentCondition extends ILibratoConditionBase {
 export interface ILibratoAboveBelowCondition extends ILibratoConditionBase {
   type: 'above' | 'below';
   threshold?: number;
-  summaryFunction: 'min' | 'max' | 'average' | 'sum' | 'count' | 'derivative' | 'absolute_value';
+  summaryFunction: 'absolute_value' | 'average' | 'count' | 'derivative' | 'max' | 'min' | 'sum';
 }
 
-export type LibratoCondition = ILibratoAbsentCondition | ILibratoAboveBelowCondition;
+export type LibratoCondition = ILibratoAboveBelowCondition | ILibratoAbsentCondition;

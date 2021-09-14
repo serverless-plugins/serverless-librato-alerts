@@ -7,10 +7,11 @@ Serverless plugin for [Librato Alerts](https://www.librato.com/docs/kb/alert/)
 Alerts can be defined on a global level under the `custom` section. Definitions can be overwritten per function and function specific alerts can be defined within the function definition.
 
 ### Template strings
+
 Template strings can contain the following tokens:
 
 | Token             | Description                                                                                                                                             |
-|-------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `$[stackName]`    | Stack name if defined (provider.stackName). If undefined, defaults to: `<service>-<stage>`                                                              |
 | `$[serviceName]`  | Name of service (service.name)                                                                                                                          |
 | `$[stage]`        | Name of the stage. Value obtained in this order: --stage CLI option, config.stage, provider.stage, or default to `dev`                                  |
@@ -21,14 +22,14 @@ Template strings can contain the following tokens:
 
 Template strings can contain the following function tokens:
 
-| Function Token          | Description                                                                  |
-|-------------------------|------------------------------------------------------------------------------|
-| `$(camelCase <value>)`  | Converts `<value>` to camel case                                             |
-| `$(kebabCase <value>)`  | Converts `<value>` to kebab case                                             |
-| `$(lowerFirst <value>)` | Converts the first character of `<value>` to lower case                      |
-| `$(toLower <value>)`    | Converts `<value>`, as a whole, to lower case just like String#toLowerCase.  |
-| `$(upperFirst <value>)` | Converts the first character of `<value>` to upper case                      |
-| `$(toUpper <value>)`    | Converts `<value>`, as a whole, to upper case just like String#toUpperCase.  |
+| Function Token          | Description                                                                 |
+| ----------------------- | --------------------------------------------------------------------------- |
+| `$(camelCase <value>)`  | Converts `<value>` to camel case                                            |
+| `$(kebabCase <value>)`  | Converts `<value>` to kebab case                                            |
+| `$(lowerFirst <value>)` | Converts the first character of `<value>` to lower case                     |
+| `$(toLower <value>)`    | Converts `<value>`, as a whole, to lower case just like String#toLowerCase. |
+| `$(upperFirst <value>)` | Converts the first character of `<value>` to upper case                     |
+| `$(toUpper <value>)`    | Converts `<value>`, as a whole, to upper case just like String#toUpperCase. |
 
 ## Usage
 

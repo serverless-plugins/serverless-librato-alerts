@@ -1,6 +1,6 @@
-import { IAlertAttributes } from './IAlertAttributes';
-import { ICondition } from './ICondition';
-import { IService } from './IService';
+import type { IAlertAttributes } from './IAlertAttributes';
+import type { ICondition } from './ICondition';
+import type { IService } from './IService';
 
 export interface IAlertResponse {
   id: number;

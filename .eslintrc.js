@@ -1,10 +1,13 @@
 module.exports = {
   root: true,
-  plugins: ['jsdoc', 'promise', 'security', 'import', '@typescript-eslint', 'prettier'],
-  extends: [
-    'eslint:recommended', //
-    'airbnb-base',
+  plugins: [
+    'jsdoc', //
+    'promise',
+    'security',
+    'import',
+    '@typescript-eslint',
   ],
+  extends: ['eslint:recommended', 'airbnb-base'],
   env: {
     node: true,
     es6: true,
@@ -33,12 +36,14 @@ module.exports = {
         usePrettierrc: true,
       },
     ],
+    'arrow-body-style': ['error', 'as-needed', { requireReturnForObjectLiteral: true }],
     curly: ['error', 'all'],
     'callback-return': ['error', ['callback', 'cb', 'next', 'done']],
     'class-methods-use-this': 'off',
     'consistent-return': 'off',
     'handle-callback-err': ['error', '^.*err'],
     'new-cap': 'off',
+    'no-confusing-arrow': ['error', { allowParens: false }],
     'no-console': 'off',
     'no-else-return': 'error',
     'no-eq-null': 'off',
@@ -55,7 +60,22 @@ module.exports = {
     'no-useless-rename': 'error',
     'padding-line-between-statements': [
       'error',
-      { blankLine: 'always', prev: ['directive', 'block', 'block-like', 'multiline-block-like', 'cjs-export', 'cjs-import', 'class', 'export', 'import', 'if'], next: '*' },
+      {
+        blankLine: 'always',
+        prev: [
+          'directive', //
+          'block',
+          'block-like',
+          'multiline-block-like',
+          'cjs-export',
+          'cjs-import',
+          'class',
+          'export',
+          'import',
+          'if',
+        ],
+        next: '*',
+      },
       { blankLine: 'never', prev: 'directive', next: 'directive' },
       { blankLine: 'any', prev: '*', next: ['if', 'for', 'cjs-import', 'import'] },
       { blankLine: 'any', prev: ['export', 'import'], next: ['export', 'import'] },
@@ -72,6 +92,13 @@ module.exports = {
 
     'import/extensions': ['error', 'never'],
     'import/no-unresolved': 'off',
+    'import/order': [
+      'error',
+      {
+        'newlines-between': 'always',
+        alphabetize: { order: 'asc', caseInsensitive: true },
+      },
+    ],
 
     'jsdoc/check-alignment': 'error',
     'jsdoc/check-indentation': 'off',
@@ -162,21 +189,19 @@ module.exports = {
         project: './tsconfig.json',
       },
       extends: [
-        'eslint:recommended', //
-        'airbnb-base',
+        'eslint:recommended',
+        'airbnb-typescript/base',
         'plugin:import/typescript',
         'plugin:@typescript-eslint/eslint-recommended',
         'plugin:@typescript-eslint/recommended',
         'plugin:@typescript-eslint/recommended-requiring-type-checking',
         'prettier',
-        'prettier/@typescript-eslint',
+        'plugin:prettier/recommended',
       ],
       rules: {
-        camelcase: 'off',
         'class-methods-use-this': 'off',
         indent: 'off',
         'max-len': 'off',
-        'no-console': 'off',
         'no-dupe-class-members': 'off',
         'no-extra-semi': 'off',
         'no-new': 'off',
@@ -185,22 +210,37 @@ module.exports = {
         'no-useless-constructor': 'off',
         'no-unused-expressions': 'error',
         'no-restricted-syntax': ['error', 'DebuggerStatement', 'LabeledStatement', 'WithStatement'],
+        'no-use-before-define': 'off',
         'no-shadow': 'off',
 
         'import/prefer-default-export': 'off',
         'import/no-cycle': 'off',
         'import/no-extraneous-dependencies': 'off',
         'import/extensions': ['error', 'never'],
+        'import/order': [
+          'error',
+          {
+            'newlines-between': 'always',
+            alphabetize: { order: 'asc', caseInsensitive: true },
+          },
+        ],
 
         '@typescript-eslint/array-type': ['error', { default: 'array' }],
         '@typescript-eslint/await-thenable': 'error',
         '@typescript-eslint/adjacent-overload-signatures': 'error',
         '@typescript-eslint/consistent-type-assertions': 'error',
         '@typescript-eslint/consistent-type-definitions': 'error',
+        '@typescript-eslint/consistent-type-imports': 'error',
         '@typescript-eslint/no-extraneous-class': 'error',
         '@typescript-eslint/explicit-function-return-type': 'error',
         '@typescript-eslint/explicit-member-accessibility': ['error'],
-        '@typescript-eslint/naming-convention': 'error',
+        '@typescript-eslint/naming-convention': [
+          'error',
+          {
+            selector: 'enumMember',
+            format: ['camelCase', 'PascalCase', 'UPPER_CASE'],
+          },
+        ],
         '@typescript-eslint/member-ordering': [
           'error',
           {
@@ -246,6 +286,7 @@ module.exports = {
         '@typescript-eslint/promise-function-async': 'off',
         '@typescript-eslint/require-await': 'error',
         '@typescript-eslint/restrict-plus-operands': 'error',
+        '@typescript-eslint/sort-type-union-intersection-members': 'error',
         '@typescript-eslint/unbound-method': 'error',
         '@typescript-eslint/unified-signatures': 'error',
       },

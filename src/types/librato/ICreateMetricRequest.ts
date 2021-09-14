@@ -1,5 +1,5 @@
 export interface ICreateMetricRequest {
-  type: 'gauge' | 'counter' | 'composite';
+  type: 'composite' | 'counter' | 'gauge';
   name: string;
   // eslint-disable-next-line @typescript-eslint/naming-convention
   display_name?: string;
@@ -18,7 +18,7 @@ export interface ICreateMetricRequest {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     display_stacked?: boolean;
     // eslint-disable-next-line @typescript-eslint/naming-convention
-    summarize_function?: 'average' | 'sum' | 'count' | 'min' | 'max';
+    summarize_function?: 'average' | 'count' | 'max' | 'min' | 'sum';
     aggregate?: boolean;
   };
   composite?: string;

@@ -33,7 +33,7 @@ nbproject
 .idea
 .editorconfig
 .eslintcache
-package-lock.json
 
 dist/
 .serverless
+example/package-lock.json

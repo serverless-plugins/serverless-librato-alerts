@@ -1,5 +1,5 @@
-import { IFunction } from './IFunction';
-import { IGlobalLibratoAlertSettings } from './config/IGlobalLibratoAlertSettings';
+import type { IGlobalLibratoAlertSettings } from './config/IGlobalLibratoAlertSettings';
+import type { IFunction } from './IFunction';
 
 export interface IServerlessInstance {
   service: {
