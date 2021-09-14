@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.10 - 2021-09-14
+
+- Change CI to run on Node v12+
+
 ## 1.0.9 - 2021-09-14
 
 - Update npms

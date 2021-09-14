@@ -1,6 +1,6 @@
 {
   "name": "serverless-librato-alerts",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "engines": {
     "node": ">= 12"
   },
@@ -45,15 +45,9 @@
     "postpublish": "pinst --enable"
   },
   "lint-staged": {
-    "*.md": [
-      "markdownlint --config=.github/linters/.markdown-lint.yml --fix"
-    ],
-    "./*.js": [
-      "eslint --fix"
-    ],
-    "*.ts": [
-      "eslint --fix"
-    ]
+    "*.md": ["markdownlint --config=.github/linters/.markdown-lint.yml --fix"],
+    "./*.js": ["eslint --fix"],
+    "*.ts": ["eslint --fix"]
   },
   "repository": "https://github.com/mpirik/serverless-librato-alerts.git"
 }
