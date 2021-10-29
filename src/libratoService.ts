@@ -45,10 +45,8 @@ export class LibratoService {
       },
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const body = await response.json();
+    const body = (await response.json()) as IAlertResponse;
     if (response.ok) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return body;
     }
 
@@ -71,10 +69,8 @@ Response (${response.status}): ${JSON.stringify(body, null, 1)}`);
       },
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const body = await response.json();
+    const body = (await response.json()) as IRetrieveMetricResponse;
     if (response.ok) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return body;
     }
 
@@ -101,10 +97,8 @@ Response (${response.status}): ${JSON.stringify(body, null, 1)}`);
       },
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const body = await response.json();
+    const body = (await response.json()) as IAlertResponse;
     if (response.ok) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return body;
     }
 
@@ -131,10 +125,9 @@ Response (${response.status}): ${JSON.stringify(body, null, 1)}`);
       return;
     }
 
-    let body = '';
+    let body: unknown = '';
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       body = await response.json();
     } catch (ex) {
       console.error(ex);
@@ -162,10 +155,9 @@ Response (${response.status}): ${JSON.stringify(body, null, 1)}`);
       return;
     }
 
-    let body = '';
+    let body: unknown = '';
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       body = await response.json();
     } catch (ex) {
       console.error(ex);
@@ -223,10 +215,8 @@ Response (${response.status}): ${JSON.stringify(body, null, 1)}`);
       },
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const body = await response.json();
+    const body = (await response.json()) as IListAlertsResponse;
     if (response.ok) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return body;
     }
 
