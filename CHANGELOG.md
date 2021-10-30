@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.12 - 2021-10-29
+
+- Replace node-fetch with axios
+
 ## 1.0.11 - 2021-10-29
 
 - Update npms
