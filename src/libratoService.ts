@@ -1,5 +1,6 @@
 import { URL } from 'url';
 
+import type { AxiosError } from 'axios';
 import axios from 'axios';
 
 import type {
@@ -34,94 +35,140 @@ export class LibratoService {
 
   public async createMetric(request: ICreateMetricRequest): Promise<IAlertResponse> {
     const url = `https://metrics-api.librato.com/v1/metrics/${request.name}`;
-    const response = await axios.put<IAlertResponse>(url, request, {
-      headers: {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        'Content-Type': 'application/json',
-      },
-    });
 
-    if (response.status === 200) {
+    try {
+      const response = await axios.put<IAlertResponse>(url, request, {
+        headers: {
+          // eslint-disable-next-line @typescript-eslint/naming-convention
+          Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
+          // eslint-disable-next-line @typescript-eslint/naming-convention
+          'Content-Type': 'application/json',
+        },
+      });
+
       return response.data;
-    }
+    } catch (ex) {
+      const axiosError = ex as AxiosError;
+      if (!axiosError.isAxiosError) {
+        throw ex;
+      }
 
-    throw new Error(`Error creating metric: 
+      throw new Error(`Error creating metric: 
 Request: PUT ${url}
 ${JSON.stringify(request, null, 1)}
 
-Response (${response.status}): ${JSON.stringify(response.data, null, 1)}`);
+Response (${axiosError.response?.status || ''}): ${JSON.stringify(axiosError.response?.data, null, 1)}`);
+    }
   }
 
   public async retrieveMetric(name: string): Promise<IRetrieveMetricResponse | null> {
     const url = `https://metrics-api.librato.com/v1/metrics/${name}`;
-    const response = await axios.get<IRetrieveMetricResponse>(url, {
-      headers: {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        'Content-Type': 'application/json',
-      },
-    });
 
-    if (response.status === 200) {
+    try {
+      const response = await axios.get<IRetrieveMetricResponse>(url, {
+        headers: {
+          // eslint-disable-next-line @typescript-eslint/naming-convention
+          Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
+          // eslint-disable-next-line @typescript-eslint/naming-convention
+          'Content-Type': 'application/json',
+        },
+      });
+
       return response.data;
-    }
+    } catch (ex) {
+      const axiosError = ex as AxiosError;
+      if (!axiosError.isAxiosError) {
+        throw ex;
+      }
 
-    if (response.status === 404) {
-      return null;
-    }
+      if (axiosError.response?.status === 404) {
+        return null;
+      }
 
-    throw new Error(`Error creating metric: 
+      throw new Error(`Error getting metric: 
 Request: GET ${url}
 
-Response (${response.status}): ${JSON.stringify(response.data, null, 1)}`);
+Response (${axiosError.response?.status || ''}): ${JSON.stringify(axiosError.response?.data, null, 1)}`);
+    }
   }
 
   public async createAlert(request: ICreateAlertRequest): Promise<IAlertResponse> {
     const url = 'https://metrics-api.librato.com/v1/alerts';
-    const response = await axios.post<IAlertResponse>(url, request, {
-      headers: {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        'Content-Type': 'application/json',
-      },
-    });
 
-    if (response.status === 200) {
+    try {
+      const response = await axios.post<IAlertResponse>(url, request, {
+        headers: {
+          // eslint-disable-next-line @typescript-eslint/naming-convention
+          Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
+          // eslint-disable-next-line @typescript-eslint/naming-convention
+          'Content-Type': 'application/json',
+        },
+      });
+
       return response.data;
-    }
+    } catch (ex) {
+      const axiosError = ex as AxiosError;
+      if (!axiosError.isAxiosError) {
+        throw ex;
+      }
 
-    throw new Error(`Error creating alert: 
+      throw new Error(`Error creating alert: 
 Request: POST ${url}
 ${JSON.stringify(request, null, 1)}
 
-Response (${response.status}): ${JSON.stringify(response.data, null, 1)}`);
+Response (${axiosError.response?.status || ''}): ${JSON.stringify(axiosError.response?.data, null, 1)}`);
+    }
   }
 
   public async updateAlert(request: IUpdateAlertRequest): Promise<void> {
-    await axios.put(`https://metrics-api.librato.com/v1/alerts/${request.id}`, request, {
-      headers: {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        'Content-Type': 'application/json',
-      },
-    });
+    const url = `https://metrics-api.librato.com/v1/alerts/${request.id}`;
+
+    try {
+      await axios.put(url, request, {
+        headers: {
+          // eslint-disable-next-line @typescript-eslint/naming-convention
+          Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
+          // eslint-disable-next-line @typescript-eslint/naming-convention
+          'Content-Type': 'application/json',
+        },
+      });
+    } catch (ex) {
+      const axiosError = ex as AxiosError;
+      if (!axiosError.isAxiosError) {
+        throw ex;
+      }
+
+      throw new Error(`Error updating alert: 
+Request: PUT ${url}
+${JSON.stringify(request, null, 1)}
+
+Response (${axiosError.response?.status || ''}): ${JSON.stringify(axiosError.response?.data, null, 1)}`);
+    }
   }
 
   public async deleteAlert(id: number): Promise<void> {
     const url = `https://metrics-api.librato.com/v1/alerts/${id}`;
-    await axios.delete(url, {
-      headers: {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        'Content-Type': 'application/json',
-      },
-    });
+
+    try {
+      await axios.delete(url, {
+        headers: {
+          // eslint-disable-next-line @typescript-eslint/naming-convention
+          Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
+          // eslint-disable-next-line @typescript-eslint/naming-convention
+          'Content-Type': 'application/json',
+        },
+      });
+    } catch (ex) {
+      const axiosError = ex as AxiosError;
+      if (!axiosError.isAxiosError) {
+        throw ex;
+      }
+
+      throw new Error(`Error deleting alert: 
+Request: DELETE ${url}
+
+Response (${axiosError.response?.status || ''}): ${JSON.stringify(axiosError.response?.data, null, 1)}`);
+    }
   }
 
   public async listAlerts(search: string): Promise<IAlertResponse[]> {
@@ -160,22 +207,27 @@ Response (${response.status}): ${JSON.stringify(response.data, null, 1)}`);
       url.searchParams.set('sort', paging.sort);
     }
 
-    const response = await axios.get<IListAlertsResponse>(url.href, {
-      headers: {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        'Content-Type': 'application/json',
-      },
-    });
+    try {
+      const response = await axios.get<IListAlertsResponse>(url.href, {
+        headers: {
+          // eslint-disable-next-line @typescript-eslint/naming-convention
+          Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
+          // eslint-disable-next-line @typescript-eslint/naming-convention
+          'Content-Type': 'application/json',
+        },
+      });
 
-    if (response.status === 200) {
       return response.data;
+    } catch (ex) {
+      const axiosError = ex as AxiosError;
+      if (!axiosError.isAxiosError) {
+        throw ex;
+      }
+
+      throw new Error(`Error listing alerts:
+Request: GET ${url.toString()}
+
+Response (${axiosError.response?.status || ''}): ${JSON.stringify(axiosError.response?.data, null, 1)}`);
     }
-
-    throw new Error(`Error listing alert:
-Request: GET ${url.href}
-
-Response (${response.status}): ${JSON.stringify(response.data, null, 1)}`);
   }
 }

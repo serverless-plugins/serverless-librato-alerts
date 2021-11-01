@@ -1,6 +1,6 @@
 {
   "name": "serverless-librato-alerts",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "engines": {
     "node": ">= 12"
   },
@@ -11,8 +11,8 @@
   "devDependencies": {
     "@types/lodash": "^4.14.176",
     "@types/serverless": "1.78.38",
-    "@typescript-eslint/eslint-plugin": "5.2.0",
-    "@typescript-eslint/parser": "5.2.0",
+    "@typescript-eslint/eslint-plugin": "5.3.0",
+    "@typescript-eslint/parser": "5.3.0",
     "eslint": "8.1.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-airbnb-typescript": "^14.0.1",
@@ -40,20 +40,13 @@
     "lint": "run-p lint:*",
     "lint-staged": "lint-staged",
     "prepublishOnly": "rm -rf dist && npm run build && npm run lint && pinst --disable",
-    "_postinstall": "husky install",
+    "postinstall": "husky install",
     "postpublish": "pinst --enable"
   },
   "lint-staged": {
-    "*.md": [
-      "prettier --write",
-      "markdownlint --config=.github/linters/.markdown-lint.yml --fix"
-    ],
-    "./*.js": [
-      "eslint --fix"
-    ],
-    "*.ts": [
-      "eslint --fix"
-    ]
+    "*.md": ["prettier --write", "markdownlint --config=.github/linters/.markdown-lint.yml --fix"],
+    "./*.js": ["eslint --fix"],
+    "*.ts": ["eslint --fix"]
   },
   "repository": "https://github.com/mpirik/serverless-librato-alerts.git"
 }

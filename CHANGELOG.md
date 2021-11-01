@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.13 - 2021-11-01
+
+- Handle axios 404 and error responses better
+
 ## 1.0.12 - 2021-10-29
 
 - Replace node-fetch with axios
