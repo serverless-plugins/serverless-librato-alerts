@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.14 - 2022-02-22
+
+- Update npms
+- Update husky to support Apple silicon homebrew package links
+
 ## 1.0.13 - 2021-11-01
 
 - Handle axios 404 and error responses better
