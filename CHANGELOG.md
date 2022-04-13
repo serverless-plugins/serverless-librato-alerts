@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.15 - 2022-04-13
+
+- Update npms
+- Allow source to be optional for conditions
+
 ## 1.0.14 - 2022-02-22
 
 - Update npms
