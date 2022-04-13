@@ -4,6 +4,7 @@ import type { ICreateMetric } from './ICreateMetric';
 
 export interface ILibratoConditionBase {
   metric: ICreateMetric | string;
+  source?: string | null;
   tags?: ITag[];
   duration?: number;
   detectReset?: boolean;

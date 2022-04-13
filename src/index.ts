@@ -483,6 +483,7 @@ class LibratoAlertIndex {
       result = {
         // eslint-disable-next-line @typescript-eslint/naming-convention
         metric_name: metricName,
+        source: condition.source,
         type: condition.type,
         duration: condition.duration,
         tags: condition.tags,
@@ -493,6 +494,7 @@ class LibratoAlertIndex {
       result = {
         // eslint-disable-next-line @typescript-eslint/naming-convention
         metric_name: metricName,
+        source: condition.source,
         type: condition.type,
         threshold: condition.threshold,
         tags: condition.tags,

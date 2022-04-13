@@ -2,7 +2,7 @@ import type { ITag } from './ITag';
 
 export interface ICondition {
   id: number;
-  source: string | null;
+  source?: string | null;
   // eslint-disable-next-line @typescript-eslint/naming-convention
   created_at: number;
   // eslint-disable-next-line @typescript-eslint/naming-convention

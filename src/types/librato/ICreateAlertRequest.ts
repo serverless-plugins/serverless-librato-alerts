@@ -1,7 +1,7 @@
 import type { IAlertAttributes } from './IAlertAttributes';
 import type { ICondition } from './ICondition';
 
-export type CreateAlertCondition = Omit<ICondition, 'created_at' | 'id' | 'source' | 'updated_at'>;
+export type CreateAlertCondition = Omit<ICondition, 'created_at' | 'id' | 'updated_at'>;
 
 export interface ICreateAlertRequest {
   name: string;
