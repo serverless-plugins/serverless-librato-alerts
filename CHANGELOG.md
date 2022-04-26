@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.0 - 2022-04-26
+
+- Update npms
+- Fix replacing template variables for condition sources
+- Drop node 12 support
+
 ## 1.0.15 - 2022-04-13
 
 - Update npms

@@ -1,29 +1,29 @@
 {
   "name": "serverless-librato-alerts",
-  "version": "1.0.15",
+  "version": "2.0.0",
   "engines": {
-    "node": ">= 12"
+    "node": ">= 14"
   },
   "dependencies": {
     "lodash": "~4.17.21",
-    "axios": "~0.26.1"
+    "axios": "~0.27.1"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.181",
-    "@types/serverless": "3.0.2",
-    "@typescript-eslint/eslint-plugin": "5.19.0",
-    "@typescript-eslint/parser": "5.19.0",
-    "eslint": "8.13.0",
+    "@types/lodash": "^4.14.182",
+    "@types/serverless": "3.12.1",
+    "@typescript-eslint/eslint-plugin": "5.21.0",
+    "@typescript-eslint/parser": "5.21.0",
+    "eslint": "8.14.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jsdoc": "^39.2.1",
+    "eslint-plugin-jsdoc": "^39.2.9",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-promise": "^6.0.0",
-    "eslint-plugin-security": "^1.4.0",
+    "eslint-plugin-security": "^1.5.0",
     "husky": "7.0.4",
-    "lint-staged": "12.3.7",
+    "lint-staged": "12.4.0",
     "markdownlint-cli": "~0.31.1",
     "npm-run-all": "^4.1.5",
     "pinst": "3.0.0",

@@ -210,6 +210,16 @@ class LibratoAlertIndex {
             }
           }
 
+          const source = condition.source
+            ? this.replaceTemplates({
+                input: condition.source,
+                functionName,
+                functionId: functionLogicalId,
+                alertName: alert.name,
+                environment,
+              })
+            : condition.source;
+
           let configMetric: ICreateMetric | string;
           if (typeof condition.metric === 'string') {
             configMetric = this.replaceTemplates({
@@ -247,6 +257,7 @@ class LibratoAlertIndex {
           conditions.push({
             ...condition,
             metric: configMetric,
+            source,
             tags,
           });
         }
