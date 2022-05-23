@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.1 - 2022-05-23
+
+- Update npms
+
 ## 2.0.0 - 2022-04-26
 
 - Update npms
