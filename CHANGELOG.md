@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.5 - 2022-10-11
+
+- Pin Axios version to v1.1.2
+
 ## 2.0.4 - 2022-10-11
 
 - Update npms
