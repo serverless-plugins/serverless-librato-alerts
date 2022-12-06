@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.7 - 2022-12-06
+
+- Update npms
+
 ## 2.0.6 - 2022-10-11
 
 - Revert axios to v0.27.2
