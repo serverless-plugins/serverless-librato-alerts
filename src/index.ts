@@ -76,12 +76,17 @@ class LibratoAlertIndex {
     }
 
     return input
-      .replace(/\$\[env:([a-zA-Z_-]+)\]/g, (_match: string, environmentVariable: string) => {
-        if (typeof environment[environmentVariable] === 'undefined') {
+      .replace(/\$\[env:([a-zA-Z_-]+)]/g, (_match: string, environmentVariable: string | undefined): string => {
+        if (environmentVariable == null) {
+          throw new Error('Unable to determine environment variable name from template string');
+        }
+
+        const value = environment[environmentVariable];
+        if (value == null) {
           throw new Error(`Unable to find environment variable: ${environmentVariable}`);
         }
 
-        return environment[environmentVariable];
+        return value;
       })
       .replace('$[alertName]', alertName)
       .replace('$[stackName]', this.stackName)
@@ -152,11 +157,12 @@ class LibratoAlertIndex {
       for (const functionAlert of functionAlerts) {
         let alert: PartialAlert;
         if (typeof functionAlert === 'string') {
-          alert = definitionsByName[functionAlert];
-
-          if (!alert) {
+          const alertDefinition = definitionsByName[functionAlert];
+          if (!alertDefinition) {
             throw new Error(`Librato alert definition ${functionAlert} does not exist!`);
           }
+
+          alert = alertDefinition;
         } else {
           alert = {
             nameTemplate: globalSettings?.nameTemplate,

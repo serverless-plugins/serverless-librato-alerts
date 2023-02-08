@@ -13,6 +13,13 @@ import type {
 } from './types/librato';
 import type { IPagedRequest } from './types/librato/IPagedRequest';
 
+declare const process: {
+  env: {
+    LIBRATO_EMAIL?: string;
+    LIBRATO_TOKEN?: string;
+  };
+};
+
 export class LibratoService {
   protected email: string;
 
@@ -22,11 +29,11 @@ export class LibratoService {
     const emailParam = email || process.env.LIBRATO_EMAIL;
     const tokenParam = token || process.env.LIBRATO_TOKEN;
     if (!emailParam) {
-      throw new Error('Please specify a email or set LIBRATO_EMAIL environment variable.');
+      throw new Error('Please specify a value for email or set LIBRATO_EMAIL environment variable.');
     }
 
     if (!tokenParam) {
-      throw new Error('Please specify a token or set LIBRATO_TOKEN environment variable.');
+      throw new Error('Please specify a value for token or set LIBRATO_TOKEN environment variable.');
     }
 
     this.email = emailParam;
@@ -53,7 +60,7 @@ export class LibratoService {
         throw ex;
       }
 
-      throw new Error(`Error creating metric: 
+      throw new Error(`Error creating metric:
 Request: PUT ${url}
 ${JSON.stringify(request, null, 1)}
 
@@ -85,7 +92,7 @@ Response (${axiosError.response?.status || ''}): ${JSON.stringify(axiosError.res
         return null;
       }
 
-      throw new Error(`Error getting metric: 
+      throw new Error(`Error getting metric:
 Request: GET ${url}
 
 Response (${axiosError.response?.status || ''}): ${JSON.stringify(axiosError.response?.data, null, 1)}`);
@@ -112,7 +119,7 @@ Response (${axiosError.response?.status || ''}): ${JSON.stringify(axiosError.res
         throw ex;
       }
 
-      throw new Error(`Error creating alert: 
+      throw new Error(`Error creating alert:
 Request: POST ${url}
 ${JSON.stringify(request, null, 1)}
 
@@ -138,7 +145,7 @@ Response (${axiosError.response?.status || ''}): ${JSON.stringify(axiosError.res
         throw ex;
       }
 
-      throw new Error(`Error updating alert: 
+      throw new Error(`Error updating alert:
 Request: PUT ${url}
 ${JSON.stringify(request, null, 1)}
 
@@ -164,7 +171,7 @@ Response (${axiosError.response?.status || ''}): ${JSON.stringify(axiosError.res
         throw ex;
       }
 
-      throw new Error(`Error deleting alert: 
+      throw new Error(`Error deleting alert:
 Request: DELETE ${url}
 
 Response (${axiosError.response?.status || ''}): ${JSON.stringify(axiosError.response?.data, null, 1)}`);
