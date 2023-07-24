@@ -26,8 +26,8 @@ export class LibratoService {
   protected token: string;
 
   public constructor(email?: string, token?: string) {
-    const emailParam = email || process.env.LIBRATO_EMAIL;
-    const tokenParam = token || process.env.LIBRATO_TOKEN;
+    const emailParam = email ?? process.env.LIBRATO_EMAIL;
+    const tokenParam = token ?? process.env.LIBRATO_TOKEN;
     if (!emailParam) {
       throw new Error('Please specify a value for email or set LIBRATO_EMAIL environment variable.');
     }
@@ -64,7 +64,7 @@ export class LibratoService {
 Request: PUT ${url}
 ${JSON.stringify(request, null, 1)}
 
-Response (${axiosError.response?.status || ''}): ${JSON.stringify(axiosError.response?.data, null, 1)}`);
+Response (${axiosError.response?.status ?? ''}): ${JSON.stringify(axiosError.response?.data, null, 1)}`);
     }
   }
 
@@ -95,7 +95,7 @@ Response (${axiosError.response?.status || ''}): ${JSON.stringify(axiosError.res
       throw new Error(`Error getting metric:
 Request: GET ${url}
 
-Response (${axiosError.response?.status || ''}): ${JSON.stringify(axiosError.response?.data, null, 1)}`);
+Response (${axiosError.response?.status ?? ''}): ${JSON.stringify(axiosError.response?.data, null, 1)}`);
     }
   }
 
@@ -123,7 +123,7 @@ Response (${axiosError.response?.status || ''}): ${JSON.stringify(axiosError.res
 Request: POST ${url}
 ${JSON.stringify(request, null, 1)}
 
-Response (${axiosError.response?.status || ''}): ${JSON.stringify(axiosError.response?.data, null, 1)}`);
+Response (${axiosError.response?.status ?? ''}): ${JSON.stringify(axiosError.response?.data, null, 1)}`);
     }
   }
 
@@ -149,7 +149,7 @@ Response (${axiosError.response?.status || ''}): ${JSON.stringify(axiosError.res
 Request: PUT ${url}
 ${JSON.stringify(request, null, 1)}
 
-Response (${axiosError.response?.status || ''}): ${JSON.stringify(axiosError.response?.data, null, 1)}`);
+Response (${axiosError.response?.status ?? ''}): ${JSON.stringify(axiosError.response?.data, null, 1)}`);
     }
   }
 
@@ -174,7 +174,7 @@ Response (${axiosError.response?.status || ''}): ${JSON.stringify(axiosError.res
       throw new Error(`Error deleting alert:
 Request: DELETE ${url}
 
-Response (${axiosError.response?.status || ''}): ${JSON.stringify(axiosError.response?.data, null, 1)}`);
+Response (${axiosError.response?.status ?? ''}): ${JSON.stringify(axiosError.response?.data, null, 1)}`);
     }
   }
 
@@ -234,7 +234,7 @@ Response (${axiosError.response?.status || ''}): ${JSON.stringify(axiosError.res
       throw new Error(`Error listing alerts:
 Request: GET ${url.toString()}
 
-Response (${axiosError.response?.status || ''}): ${JSON.stringify(axiosError.response?.data, null, 1)}`);
+Response (${axiosError.response?.status ?? ''}): ${JSON.stringify(axiosError.response?.data, null, 1)}`);
     }
   }
 }

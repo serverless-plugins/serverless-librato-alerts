@@ -22,5 +22,5 @@ export interface ICreateMetric {
     aggregate?: boolean;
   };
   composite?: string;
-  tags?: { [index: string]: string };
+  tags?: Record<string, string>;
 }

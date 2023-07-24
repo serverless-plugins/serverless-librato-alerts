@@ -29,7 +29,7 @@ interface IReplaceTemplatesOptions {
   functionName: string;
   functionId: string;
   alertName: string;
-  environment: { [name: string]: string };
+  environment: Record<string, string>;
 }
 
 class LibratoAlertIndex {
@@ -50,7 +50,7 @@ class LibratoAlertIndex {
   public constructor(serverless: IServerlessInstance, options: IServerlessOptions) {
     this.serverless = serverless;
     this.options = options;
-    this.stage = this.options.stage || this.serverless.config?.stage || this.serverless.service.provider.stage || 'dev';
+    this.stage = this.options.stage ?? this.serverless.config?.stage ?? this.serverless.service.provider.stage ?? 'dev';
     this.stackName = this.getStackName();
 
     this.hooks = {
@@ -117,23 +117,23 @@ class LibratoAlertIndex {
   private isEnabledForStage(): boolean {
     const globalSettings = this.getGlobalSettings();
 
-    return !globalSettings || !globalSettings.stages || globalSettings.stages.includes(this.stage);
+    return !globalSettings?.stages || globalSettings.stages.includes(this.stage);
   }
 
   private getAlertsFromConfiguration(): PartialAlert[] {
     const globalSettings = this.getGlobalSettings();
-    const definitionsByName: { [name: string]: PartialAlert } = {};
+    const definitionsByName: Record<string, PartialAlert> = {};
 
     if (globalSettings) {
-      for (const definition of globalSettings.definitions || []) {
+      for (const definition of globalSettings.definitions ?? []) {
         if (definition.name) {
           definitionsByName[definition.name] = definition;
         }
       }
     }
 
-    const globalAlertsByName: { [name: string]: PartialAlert } = {};
-    for (const globalAlertName of globalSettings?.global || []) {
+    const globalAlertsByName: Record<string, PartialAlert> = {};
+    for (const globalAlertName of globalSettings?.global ?? []) {
       const alert = definitionsByName[globalAlertName];
       if (!alert) {
         throw new Error(`Librato alert definition ${globalAlertName} (global) does not exist!`);
@@ -149,10 +149,10 @@ class LibratoAlertIndex {
     for (const functionName of this.serverless.service.getAllFunctions()) {
       const functionLogicalId = `${functionName.replace(/-/g, 'Dash').replace(/_/g, 'Underscore')}Function`;
       const functionObj = this.serverless.service.getFunction(functionName);
-      const alertsByName: { [name: string]: PartialAlert } = {
+      const alertsByName: Record<string, PartialAlert> = {
         ...globalAlertsByName,
       };
-      const functionAlerts = functionObj.libratoAlerts || [];
+      const functionAlerts = functionObj.libratoAlerts ?? [];
 
       for (const functionAlert of functionAlerts) {
         let alert: PartialAlert;
@@ -180,7 +180,7 @@ class LibratoAlertIndex {
       };
 
       for (const alert of Object.values(alertsByName)) {
-        const nameTemplate = alert.nameTemplate || this.defaultNameTemplate;
+        const nameTemplate = alert.nameTemplate ?? this.defaultNameTemplate;
         const fullName = this.replaceTemplates({
           input: nameTemplate,
           functionName,
@@ -191,7 +191,7 @@ class LibratoAlertIndex {
 
         // Perform template replacement for condition metric name and tag values
         const conditions: (ILibratoAboveBelowCondition | ILibratoAbsentCondition)[] = [];
-        for (const condition of alert.conditions || []) {
+        for (const condition of alert.conditions ?? []) {
           let tags: ITag[] | undefined;
           if (condition.tags) {
             tags = [];
@@ -292,9 +292,9 @@ class LibratoAlertIndex {
 
     const alertConfigurations = this.getAlertsFromConfiguration();
     const existingAlertSearchText = this.replaceTemplates({
-      input: globalSettings?.nameSearchForUpdatesAndDeletes || this.defaultNameSearchForUpdatesAndDeletes,
+      input: globalSettings?.nameSearchForUpdatesAndDeletes ?? this.defaultNameSearchForUpdatesAndDeletes,
       alertName: '',
-      environment: this.serverless.service.provider.environment || {},
+      environment: this.serverless.service.provider.environment ?? {},
       functionId: '',
       functionName: '',
     });
@@ -345,8 +345,8 @@ class LibratoAlertIndex {
             if (!exists) {
               metricsToAdd.push({
                 ...condition.metric,
-                type: condition.metric.type || 'gauge',
-                period: condition.metric.period || 60,
+                type: condition.metric.type ?? 'gauge',
+                period: condition.metric.period ?? 60,
               });
             }
           }
@@ -389,7 +389,7 @@ class LibratoAlertIndex {
 
   private getUpdateAlertRequest(alertConfiguration: PartialAlert, existingAlert: IAlertResponse): IUpdateAlertRequest | null {
     const conditions: UpdateCondition[] = [];
-    const alertConfigurationConditions = alertConfiguration.conditions || [];
+    const alertConfigurationConditions = alertConfiguration.conditions ?? [];
     let hasNewCondition = false;
     for (const condition of alertConfigurationConditions) {
       const createCondition = this.getCreateAlertCondition(condition);
@@ -433,7 +433,7 @@ class LibratoAlertIndex {
     const request: IUpdateAlertRequest = {
       ...existingAlert,
       name: alertConfiguration.name,
-      description: alertConfiguration.description || '',
+      description: alertConfiguration.description ?? '',
       conditions,
       attributes,
       // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -447,6 +447,7 @@ class LibratoAlertIndex {
       (!request.rearm_seconds || request.rearm_seconds === existingAlert.rearm_seconds) &&
       hasNewCondition &&
       ((!request.attributes && !existingAlert.attributes) || _.isEqual(request.attributes, existingAlert.attributes)) &&
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       ((!request.services && !existingAlert.services) || _.isEqual(_.sortBy(request.services), _.sortBy(_.map(existingAlert.services, 'id'))));
 
     if (isEqual) {
@@ -457,7 +458,7 @@ class LibratoAlertIndex {
   }
 
   private getCreateAlertRequest(alertConfiguration: PartialAlert): ICreateAlertRequest {
-    const conditions = (alertConfiguration.conditions || []).map((condition: ILibratoAboveBelowCondition | ILibratoAbsentCondition) => this.getCreateAlertCondition(condition));
+    const conditions = (alertConfiguration.conditions ?? []).map((condition: ILibratoAboveBelowCondition | ILibratoAbsentCondition) => this.getCreateAlertCondition(condition));
 
     let attributes: IAlertAttributes | undefined;
     if (alertConfiguration.runbookUrl) {
@@ -476,7 +477,7 @@ class LibratoAlertIndex {
 
     const request: ICreateAlertRequest = {
       name: alertConfiguration.name,
-      description: alertConfiguration.description || '',
+      description: alertConfiguration.description ?? '',
       conditions,
       attributes,
       // eslint-disable-next-line @typescript-eslint/naming-convention

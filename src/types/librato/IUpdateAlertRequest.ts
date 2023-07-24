@@ -7,8 +7,8 @@ export interface IUpdateAlertRequest {
   id: number;
   name: string;
   description: string;
-  conditions: UpdateCondition[];
-  services: number[];
+  conditions?: UpdateCondition[];
+  services?: number[];
   attributes?: IAlertAttributes;
   active?: boolean;
   // eslint-disable-next-line @typescript-eslint/naming-convention

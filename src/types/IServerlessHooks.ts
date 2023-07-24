@@ -1,3 +1,1 @@
-export interface IServerlessHooks {
-  [index: string]: () => Promise<void>;
-}
+export type IServerlessHooks = Record<string, () => Promise<void>>;

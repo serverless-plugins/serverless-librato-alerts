@@ -1,6 +1,6 @@
 export interface IService {
   id: number;
   type: string;
-  settings: { [index: string]: string };
+  settings: Record<string, string>;
   title: string;
 }
