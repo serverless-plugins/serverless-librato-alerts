@@ -37,7 +37,7 @@ Template strings can contain the following function tokens:
 service: foo
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs20.x
 
 custom:
   libratoAlerts:

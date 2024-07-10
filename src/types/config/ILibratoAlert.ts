@@ -1,6 +1,6 @@
-import type { PartiallyRequired } from '../PartiallyRequired';
+import type { PartiallyRequired } from '../PartiallyRequired.js';
 
-import type { LibratoCondition } from './LibratoCondition';
+import type { LibratoCondition } from './LibratoCondition.js';
 
 export interface ILibratoAlert {
   name: string;

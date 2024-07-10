@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": ["esnext"],
-    "module": "commonjs",
+    "module": "ES2022",
+    "lib": ["ESNext"],
     "moduleResolution": "node",
+    "allowJs": false,
 
     "inlineSourceMap": true,
 

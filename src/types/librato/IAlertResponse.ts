@@ -1,6 +1,6 @@
-import type { IAlertAttributes } from './IAlertAttributes';
-import type { ICondition } from './ICondition';
-import type { IService } from './IService';
+import type { IAlertAttributes } from './IAlertAttributes.js';
+import type { ICondition } from './ICondition.js';
+import type { IService } from './IService.js';
 
 export interface IAlertResponse {
   id: number;
@@ -10,8 +10,8 @@ export interface IAlertResponse {
   services: IService[];
   attributes?: IAlertAttributes;
   active?: boolean;
-  // eslint-disable-next-line @typescript-eslint/naming-convention
+
   rearm_seconds?: number;
-  // eslint-disable-next-line @typescript-eslint/naming-convention
+
   rearm_per_signal: boolean;
 }

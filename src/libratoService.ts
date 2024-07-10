@@ -10,8 +10,8 @@ import type {
   IListAlertsResponse,
   IRetrieveMetricResponse,
   IUpdateAlertRequest,
-} from './types/librato';
-import type { IPagedRequest } from './types/librato/IPagedRequest';
+} from './types/librato/index.js';
+import type { IPagedRequest } from './types/librato/IPagedRequest.js';
 
 declare const process: {
   env: {
@@ -46,9 +46,8 @@ export class LibratoService {
     try {
       const response = await axios.put<IAlertResponse>(url, request, {
         headers: {
-          // eslint-disable-next-line @typescript-eslint/naming-convention
           Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
-          // eslint-disable-next-line @typescript-eslint/naming-convention
+
           'Content-Type': 'application/json',
         },
       });
@@ -74,9 +73,8 @@ Response (${axiosError.response?.status ?? ''}): ${JSON.stringify(axiosError.res
     try {
       const response = await axios.get<IRetrieveMetricResponse>(url, {
         headers: {
-          // eslint-disable-next-line @typescript-eslint/naming-convention
           Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
-          // eslint-disable-next-line @typescript-eslint/naming-convention
+
           'Content-Type': 'application/json',
         },
       });
@@ -105,9 +103,8 @@ Response (${axiosError.response?.status ?? ''}): ${JSON.stringify(axiosError.res
     try {
       const response = await axios.post<IAlertResponse>(url, request, {
         headers: {
-          // eslint-disable-next-line @typescript-eslint/naming-convention
           Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
-          // eslint-disable-next-line @typescript-eslint/naming-convention
+
           'Content-Type': 'application/json',
         },
       });
@@ -133,9 +130,8 @@ Response (${axiosError.response?.status ?? ''}): ${JSON.stringify(axiosError.res
     try {
       await axios.put(url, request, {
         headers: {
-          // eslint-disable-next-line @typescript-eslint/naming-convention
           Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
-          // eslint-disable-next-line @typescript-eslint/naming-convention
+
           'Content-Type': 'application/json',
         },
       });
@@ -159,9 +155,8 @@ Response (${axiosError.response?.status ?? ''}): ${JSON.stringify(axiosError.res
     try {
       await axios.delete(url, {
         headers: {
-          // eslint-disable-next-line @typescript-eslint/naming-convention
           Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
-          // eslint-disable-next-line @typescript-eslint/naming-convention
+
           'Content-Type': 'application/json',
         },
       });
@@ -217,9 +212,8 @@ Response (${axiosError.response?.status ?? ''}): ${JSON.stringify(axiosError.res
     try {
       const response = await axios.get<IListAlertsResponse>(url.href, {
         headers: {
-          // eslint-disable-next-line @typescript-eslint/naming-convention
           Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
-          // eslint-disable-next-line @typescript-eslint/naming-convention
+
           'Content-Type': 'application/json',
         },
       });

@@ -1,6 +1,6 @@
-import type { ITag } from '../librato';
+import type { ITag } from '../librato/index.js';
 
-import type { ICreateMetric } from './ICreateMetric';
+import type { ICreateMetric } from './ICreateMetric.js';
 
 export interface ILibratoConditionBase {
   metric: ICreateMetric | string;

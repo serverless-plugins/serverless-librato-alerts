@@ -1,18 +1,18 @@
 import * as _ from 'lodash';
 
-import { LibratoService } from './libratoService';
+import { LibratoService } from './libratoService.js';
 import type {
   IServerlessHooks, //
   IServerlessInstance,
   IServerlessOptions,
-} from './types';
+} from './types/index.js';
 import type {
   IGlobalLibratoAlertSettings, //
   ILibratoAboveBelowCondition,
   ILibratoAbsentCondition,
   PartialAlert,
-} from './types/config';
-import type { ICreateMetric } from './types/config/ICreateMetric';
+} from './types/config/index.js';
+import type { ICreateMetric } from './types/config/ICreateMetric.js';
 import type {
   CreateAlertCondition, //
   IAlertAttributes,
@@ -22,7 +22,7 @@ import type {
   ITag,
   IUpdateAlertRequest,
   UpdateCondition,
-} from './types/librato';
+} from './types/librato/index.js';
 
 interface IReplaceTemplatesOptions {
   input: string;
@@ -76,7 +76,7 @@ class LibratoAlertIndex {
     }
 
     return input
-      .replace(/\$\[env:([a-zA-Z_-]+)]/g, (_match: string, environmentVariable: string | undefined): string => {
+      .replace(/\$\[env:([A-Z_a-z-]+)]/g, (_match: string, environmentVariable: string | undefined): string => {
         if (environmentVariable == null) {
           throw new Error('Unable to determine environment variable name from template string');
         }
@@ -94,7 +94,7 @@ class LibratoAlertIndex {
       .replace('$[stage]', this.stage)
       .replace('$[functionName]', functionName)
       .replace('$[functionId]', functionId)
-      .replace(/\$\(([a-zA-Z]+) ([a-zA-Z_-]+)\)/g, (_match: string, modifier: string, value: string) => {
+      .replace(/\$\(([A-Za-z]+) ([A-Z_a-z-]+)\)/g, (_match: string, modifier: string, value: string) => {
         switch (modifier) {
           case 'kebabCase':
             return _.kebabCase(value);
@@ -395,7 +395,6 @@ class LibratoAlertIndex {
       const createCondition = this.getCreateAlertCondition(condition);
 
       const existingCondition = _.find(existingAlert.conditions, {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         metric_name: createCondition.metric_name,
         type: createCondition.type,
         duration: createCondition.duration,
@@ -418,7 +417,6 @@ class LibratoAlertIndex {
     let attributes: IAlertAttributes | undefined;
     if (alertConfiguration.runbookUrl) {
       attributes = {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         runbook_url: alertConfiguration.runbookUrl,
       };
     }
@@ -436,7 +434,7 @@ class LibratoAlertIndex {
       description: alertConfiguration.description ?? '',
       conditions,
       attributes,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
+
       rearm_seconds: alertConfiguration.rearmSeconds,
       services,
     };
@@ -463,7 +461,6 @@ class LibratoAlertIndex {
     let attributes: IAlertAttributes | undefined;
     if (alertConfiguration.runbookUrl) {
       attributes = {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         runbook_url: alertConfiguration.runbookUrl,
       };
     }
@@ -480,7 +477,7 @@ class LibratoAlertIndex {
       description: alertConfiguration.description ?? '',
       conditions,
       attributes,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
+
       rearm_seconds: alertConfiguration.rearmSeconds,
       services,
     };
@@ -499,26 +496,24 @@ class LibratoAlertIndex {
     let result: CreateAlertCondition;
     if (condition.type === 'absent') {
       result = {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         metric_name: metricName,
         source: condition.source,
         type: condition.type,
         duration: condition.duration,
         tags: condition.tags,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
+
         detect_reset: condition.detectReset,
       };
     } else {
       result = {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         metric_name: metricName,
         source: condition.source,
         type: condition.type,
         threshold: condition.threshold,
         tags: condition.tags,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
+
         detect_reset: condition.detectReset,
-        // eslint-disable-next-line @typescript-eslint/naming-convention
+
         summary_function: condition.summaryFunction,
         duration: condition.duration,
       };
@@ -528,4 +523,4 @@ class LibratoAlertIndex {
   }
 }
 
-export = LibratoAlertIndex;
+export default LibratoAlertIndex;

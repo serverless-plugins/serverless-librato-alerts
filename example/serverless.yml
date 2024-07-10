@@ -3,7 +3,7 @@ service: librato-alerts-example
 provider:
   name: aws
   region: us-east-1
-  runtime: nodejs12.x
+  runtime: nodejs20.x
   versionFunctions: false
 
 package:
