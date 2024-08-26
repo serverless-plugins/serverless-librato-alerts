@@ -1,28 +1,10 @@
 import * as _ from 'lodash';
 
 import { LibratoService } from './libratoService.js';
-import type {
-  IServerlessHooks, //
-  IServerlessInstance,
-  IServerlessOptions,
-} from './types/index.js';
-import type {
-  IGlobalLibratoAlertSettings, //
-  ILibratoAboveBelowCondition,
-  ILibratoAbsentCondition,
-  PartialAlert,
-} from './types/config/index.js';
 import type { ICreateMetric } from './types/config/ICreateMetric.js';
-import type {
-  CreateAlertCondition, //
-  IAlertAttributes,
-  IAlertResponse,
-  ICreateAlertRequest,
-  ICreateMetricRequest,
-  ITag,
-  IUpdateAlertRequest,
-  UpdateCondition,
-} from './types/librato/index.js';
+import type { IGlobalLibratoAlertSettings, ILibratoAboveBelowCondition, ILibratoAbsentCondition, PartialAlert } from './types/config/index.js';
+import type { IServerlessHooks, IServerlessInstance, IServerlessOptions } from './types/index.js';
+import type { CreateAlertCondition, IAlertAttributes, IAlertResponse, ICreateAlertRequest, ICreateMetricRequest, ITag, IUpdateAlertRequest, UpdateCondition } from './types/librato/index.js';
 
 interface IReplaceTemplatesOptions {
   input: string;
