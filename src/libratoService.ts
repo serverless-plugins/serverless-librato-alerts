@@ -1,4 +1,4 @@
-import { URL } from 'url';
+import { URL } from 'node:url';
 
 import type { AxiosError } from 'axios';
 import axios from 'axios';

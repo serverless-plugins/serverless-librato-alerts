@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.0.4 - 2024-12-17
+
+- Update npms
+- Use node protocol for built-in modules
+
 ## 5.0.3 - 2024-11-29
 
 - Update npms
