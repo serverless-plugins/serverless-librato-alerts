@@ -18,7 +18,7 @@
 ## 5.0.0 - 2024-07-10
 
 - Publish as CJS and ESM
-- Upgrade eslint to flat config
+- Upgrade ESLint to flat config
 - Update npms and dependencies
 
 ## 4.0.7 - 2024-05-13
@@ -113,7 +113,7 @@
 ## 1.0.14 - 2022-02-22
 
 - Update npms
-- Update husky to support Apple silicon homebrew package links
+- Update husky to support Apple silicon Homebrew package links
 
 ## 1.0.13 - 2021-11-01
 
@@ -126,7 +126,7 @@
 ## 1.0.11 - 2021-10-29
 
 - Update npms
-- Format markdown files
+- Format Markdown files
 
 ## 1.0.10 - 2021-09-14
 
@@ -135,7 +135,7 @@
 ## 1.0.9 - 2021-09-14
 
 - Update npms
-- Update lint rules and add markdown linting
+- Update linter rules and add Markdown linting
 
 ## 1.0.8
 
@@ -156,7 +156,7 @@
 ## 1.0.4
 
 - Fix searching for existing alerts - replace tokens in search text
-- Fix trying to parse json response when updating issues
+- Fix trying to parse JSON response when updating issues
 - Fix issues trying to determine if an existing alert has an update
 
 ## 1.0.3
