@@ -41,23 +41,23 @@
     "node": ">= 18"
   },
   "dependencies": {
-    "axios": "1.7.9",
+    "axios": "1.13.2",
     "lodash": "~4.17.21"
   },
   "devDependencies": {
-    "@types/lodash": "^4.17.13",
-    "@types/node": ">=22",
-    "@types/serverless": "3.12.25",
-    "eslint": "9.17.0",
-    "eslint-config-decent": "2.3.0",
+    "@types/lodash": "^4.17.21",
+    "@types/node": ">=25",
+    "@types/serverless": "3.12.27",
+    "eslint": "9.39.2",
+    "eslint-config-decent": "3.1.87",
     "husky": "9.1.7",
-    "lint-staged": "15.2.11",
-    "markdownlint-cli": "~0.43.0",
+    "lint-staged": "16.2.7",
+    "markdownlint-cli": "~0.47.0",
     "npm-run-all": "^4.1.5",
     "pinst": "3.0.0",
-    "prettier": "3.4.2",
-    "prettier-plugin-packagejson": "2.5.6",
-    "typescript": "5.7.2",
-    "unbuild": "3.0.1"
+    "prettier": "3.7.4",
+    "prettier-plugin-packagejson": "2.5.20",
+    "typescript": "5.9.3",
+    "unbuild": "3.6.1"
   }
 }
