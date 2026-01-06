@@ -459,7 +459,6 @@ class LibratoAlertIndex {
       description: alertConfiguration.description ?? '',
       conditions,
       attributes,
-
       rearm_seconds: alertConfiguration.rearmSeconds,
       services,
     };
@@ -483,7 +482,6 @@ class LibratoAlertIndex {
         type: condition.type,
         duration: condition.duration,
         tags: condition.tags,
-
         detect_reset: condition.detectReset,
       };
     } else {
@@ -493,9 +491,7 @@ class LibratoAlertIndex {
         type: condition.type,
         threshold: condition.threshold,
         tags: condition.tags,
-
         detect_reset: condition.detectReset,
-
         summary_function: condition.summaryFunction,
         duration: condition.duration,
       };
