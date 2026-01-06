@@ -1,5 +1,3 @@
-# Changelog
-
 ## 5.0.4 - 2024-12-17
 
 - Update npms
