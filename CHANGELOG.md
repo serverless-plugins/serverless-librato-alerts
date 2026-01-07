@@ -1,3 +1,9 @@
+## [5.0.6](https://github.com/serverless-plugins/serverless-librato-alerts/compare/5.0.5...5.0.6) (2026-01-07)
+
+### Bug Fixes
+
+- **deps:** pin dependency lodash to 4.17.21 ([#8](https://github.com/serverless-plugins/serverless-librato-alerts/issues/8)) ([0ef0d37](https://github.com/serverless-plugins/serverless-librato-alerts/commit/0ef0d3723cd3a774ab59416992e887fa756c76e5))
+
 ## [5.0.5](https://github.com/serverless-plugins/serverless-librato-alerts/compare/5.0.4...5.0.5) (2026-01-06)
 
 ## 5.0.4 - 2024-12-17
