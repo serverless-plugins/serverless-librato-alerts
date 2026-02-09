@@ -8,7 +8,7 @@
   "dependencies": {},
   "devDependencies": {
     "serverless": "4.31.2",
-    "serverless-librato-alerts": "5.0.9"
+    "serverless-librato-alerts": "5.0.10"
   },
   "scripts": {
     "package": "serverless package",
