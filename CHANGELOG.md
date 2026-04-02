@@ -1,3 +1,9 @@
+## [5.0.13](https://github.com/serverless-plugins/serverless-librato-alerts/compare/5.0.12...5.0.13) (2026-04-02)
+
+### Bug Fixes
+
+- **deps:** update dependency lodash to v4.18.1 ([#87](https://github.com/serverless-plugins/serverless-librato-alerts/issues/87)) ([79d9193](https://github.com/serverless-plugins/serverless-librato-alerts/commit/79d9193ebffe2fe24bf42003e423d6f9b63662e5))
+
 ## [5.0.12](https://github.com/serverless-plugins/serverless-librato-alerts/compare/5.0.11...5.0.12) (2026-03-28)
 
 ### Bug Fixes
