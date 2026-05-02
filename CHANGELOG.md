@@ -1,3 +1,9 @@
+## [5.0.17](https://github.com/serverless-plugins/serverless-librato-alerts/compare/5.0.16...5.0.17) (2026-05-02)
+
+### Bug Fixes
+
+- **deps:** update dependency axios to v1.16.0 ([#106](https://github.com/serverless-plugins/serverless-librato-alerts/issues/106)) ([7b42798](https://github.com/serverless-plugins/serverless-librato-alerts/commit/7b427985d9bc512a4295313e3b1b7ea8275db3be))
+
 ## [5.0.16](https://github.com/serverless-plugins/serverless-librato-alerts/compare/5.0.15...5.0.16) (2026-04-22)
 
 ### Bug Fixes
