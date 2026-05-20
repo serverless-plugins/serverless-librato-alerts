@@ -1,3 +1,5 @@
+## [5.0.19](https://github.com/serverless-plugins/serverless-librato-alerts/compare/5.0.18...5.0.19) (2026-05-20)
+
 ## [5.0.18](https://github.com/serverless-plugins/serverless-librato-alerts/compare/5.0.17...5.0.18) (2026-05-13)
 
 ### Bug Fixes
