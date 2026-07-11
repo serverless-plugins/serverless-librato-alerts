@@ -32,6 +32,9 @@ jobs:
         env:
           # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # The pnpm lockfile is machine-generated; codespell flags package names
+          # and prettier would reformat it
+          FILTER_REGEX_EXCLUDE: '.*pnpm-lock\.yaml'
           FIX_CSS_PRETTIER: false
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_ANSIBLE: false

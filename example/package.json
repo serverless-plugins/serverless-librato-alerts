@@ -1,17 +1,17 @@
 {
   "name": "testy-mc-tester",
-  "private": true,
   "version": "1.0.0",
-  "engines": {
-    "node": ">= 10"
+  "private": true,
+  "scripts": {
+    "package": "serverless package",
+    "deploy": "serverless deploy"
   },
   "dependencies": {},
   "devDependencies": {
     "serverless": "4.39.0",
     "serverless-librato-alerts": "5.0.19"
   },
-  "scripts": {
-    "package": "serverless package",
-    "deploy": "serverless deploy"
+  "engines": {
+    "node": ">= 10"
   }
 }

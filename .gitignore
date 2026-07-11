@@ -36,3 +36,9 @@ nbproject
 dist/
 .serverless
 example/package-lock.json
+.vite-hooks/
+
+# beads issue tracker (local only, like ../bigal)
+.beads/
+.dolt/
+*.db

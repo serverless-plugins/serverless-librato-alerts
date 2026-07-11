@@ -1,0 +1,7 @@
+# pnpm settings (pnpm 10+ reads these from pnpm-workspace.yaml, not .npmrc)
+saveExact: true
+
+# Supply-chain hardening: refuse to resolve versions younger than 3 days.
+# Must stay <= Renovate's security:minimumReleaseAgeNpm window (3 days, from config:best-practices),
+# otherwise pnpm refuses to install the exact versions Renovate pins and every Renovate PR fails.
+minimumReleaseAge: 4320

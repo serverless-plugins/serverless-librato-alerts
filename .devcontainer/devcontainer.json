@@ -2,15 +2,14 @@
   "name": "serverless-librato-alerts",
   "features": {
     "ghcr.io/devcontainers/features/node:2": {
-      "version": "lts"
+      "version": "lts",
+      "pnpmVersion": "latest"
     }
   },
   "customizations": {
     "vscode": {
-      "extensions": [
-        "EditorConfig.EditorConfig"
-      ]
+      "extensions": ["EditorConfig.EditorConfig"]
     }
   },
-  "postCreateCommand": "npm install"
+  "postCreateCommand": "pnpm install"
 }
