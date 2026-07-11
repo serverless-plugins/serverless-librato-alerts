@@ -1,14 +1,17 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "ES2022",
-    "lib": ["ESNext", "dom"],
-    "moduleResolution": "node",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ESNext"],
+    "types": ["node"],
     "allowJs": false,
 
+    "declaration": true,
+    "isolatedDeclarations": true,
     "inlineSourceMap": true,
+    "skipLibCheck": true,
 
-    "baseUrl": ".",
     "outDir": "dist",
 
     "strict": true,
@@ -19,12 +22,8 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "noPropertyAccessFromIndexSignature": true,
-    "noUncheckedIndexedAccess": true,
-
-    "paths": {
-      "*": ["node_modules/*"]
-    }
+    "noUncheckedIndexedAccess": true
   },
-  "include": ["src"],
+  "include": ["src", "tests", "vite.config.ts"],
   "exclude": ["node_modules", "dist"]
 }

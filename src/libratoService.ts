@@ -1,8 +1,5 @@
 import { URL } from 'node:url';
 
-import type { AxiosError } from 'axios';
-import axios from 'axios';
-
 import type {
   IAlertResponse, //
   ICreateAlertRequest,
@@ -19,6 +16,16 @@ declare const process: {
     LIBRATO_TOKEN?: string;
   };
 };
+
+type HttpMethod = 'DELETE' | 'GET' | 'POST' | 'PUT';
+
+interface ILibratoRequest {
+  method: HttpMethod;
+  url: URL | string;
+  // Used in error messages: `Error ${action}:`
+  action: string;
+  body?: unknown;
+}
 
 export class LibratoService {
   protected email: string;
@@ -41,136 +48,59 @@ export class LibratoService {
   }
 
   public async createMetric(request: ICreateMetricRequest): Promise<IAlertResponse> {
-    const url = `https://metrics-api.librato.com/v1/metrics/${request.name}`;
+    const response = await this.send({
+      method: 'PUT',
+      url: `https://metrics-api.librato.com/v1/metrics/${request.name}`,
+      action: 'creating metric',
+      body: request,
+    });
 
-    try {
-      const response = await axios.put<IAlertResponse>(url, request, {
-        headers: {
-          Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
-
-          'Content-Type': 'application/json',
-        },
-      });
-
-      return response.data;
-    } catch (ex) {
-      const axiosError = ex as AxiosError;
-      if (!axiosError.isAxiosError) {
-        throw ex;
-      }
-
-      throw new Error(`Error creating metric:
-Request: PUT ${url}
-${JSON.stringify(request, null, 1)}
-
-Response (${axiosError.response?.status ?? ''}): ${JSON.stringify(axiosError.response?.data, null, 1)}`);
-    }
+    return (await parseResponseBody(response)) as IAlertResponse;
   }
 
   public async retrieveMetric(name: string): Promise<IRetrieveMetricResponse | null> {
-    const url = `https://metrics-api.librato.com/v1/metrics/${name}`;
+    const response = await this.send(
+      {
+        method: 'GET',
+        url: `https://metrics-api.librato.com/v1/metrics/${name}`,
+        action: 'getting metric',
+      },
+      [404],
+    );
 
-    try {
-      const response = await axios.get<IRetrieveMetricResponse>(url, {
-        headers: {
-          Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
-
-          'Content-Type': 'application/json',
-        },
-      });
-
-      return response.data;
-    } catch (ex) {
-      const axiosError = ex as AxiosError;
-      if (!axiosError.isAxiosError) {
-        throw ex;
-      }
-
-      if (axiosError.response?.status === 404) {
-        return null;
-      }
-
-      throw new Error(`Error getting metric:
-Request: GET ${url}
-
-Response (${axiosError.response?.status ?? ''}): ${JSON.stringify(axiosError.response?.data, null, 1)}`);
+    if (response.status === 404) {
+      return null;
     }
+
+    return (await parseResponseBody(response)) as IRetrieveMetricResponse;
   }
 
   public async createAlert(request: ICreateAlertRequest): Promise<IAlertResponse> {
-    const url = 'https://metrics-api.librato.com/v1/alerts';
+    const response = await this.send({
+      method: 'POST',
+      url: 'https://metrics-api.librato.com/v1/alerts',
+      action: 'creating alert',
+      body: request,
+    });
 
-    try {
-      const response = await axios.post<IAlertResponse>(url, request, {
-        headers: {
-          Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
-
-          'Content-Type': 'application/json',
-        },
-      });
-
-      return response.data;
-    } catch (ex) {
-      const axiosError = ex as AxiosError;
-      if (!axiosError.isAxiosError) {
-        throw ex;
-      }
-
-      throw new Error(`Error creating alert:
-Request: POST ${url}
-${JSON.stringify(request, null, 1)}
-
-Response (${axiosError.response?.status ?? ''}): ${JSON.stringify(axiosError.response?.data, null, 1)}`);
-    }
+    return (await parseResponseBody(response)) as IAlertResponse;
   }
 
   public async updateAlert(request: IUpdateAlertRequest): Promise<void> {
-    const url = `https://metrics-api.librato.com/v1/alerts/${request.id}`;
-
-    try {
-      await axios.put(url, request, {
-        headers: {
-          Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
-
-          'Content-Type': 'application/json',
-        },
-      });
-    } catch (ex) {
-      const axiosError = ex as AxiosError;
-      if (!axiosError.isAxiosError) {
-        throw ex;
-      }
-
-      throw new Error(`Error updating alert:
-Request: PUT ${url}
-${JSON.stringify(request, null, 1)}
-
-Response (${axiosError.response?.status ?? ''}): ${JSON.stringify(axiosError.response?.data, null, 1)}`);
-    }
+    await this.send({
+      method: 'PUT',
+      url: `https://metrics-api.librato.com/v1/alerts/${request.id}`,
+      action: 'updating alert',
+      body: request,
+    });
   }
 
   public async deleteAlert(id: number): Promise<void> {
-    const url = `https://metrics-api.librato.com/v1/alerts/${id}`;
-
-    try {
-      await axios.delete(url, {
-        headers: {
-          Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
-
-          'Content-Type': 'application/json',
-        },
-      });
-    } catch (ex) {
-      const axiosError = ex as AxiosError;
-      if (!axiosError.isAxiosError) {
-        throw ex;
-      }
-
-      throw new Error(`Error deleting alert:
-Request: DELETE ${url}
-
-Response (${axiosError.response?.status ?? ''}): ${JSON.stringify(axiosError.response?.data, null, 1)}`);
-    }
+    await this.send({
+      method: 'DELETE',
+      url: `https://metrics-api.librato.com/v1/alerts/${id}`,
+      action: 'deleting alert',
+    });
   }
 
   public async listAlerts(search: string): Promise<IAlertResponse[]> {
@@ -182,7 +112,6 @@ Response (${axiosError.response?.status ?? ''}): ${JSON.stringify(axiosError.res
     alerts.push(...response.alerts);
     while (paging.length === response.query.length && alerts.length < response.query.found && response.query.offset + response.query.length < response.query.found) {
       paging.offset = response.query.offset + response.query.length;
-      // eslint-disable-next-line no-await-in-loop
       response = await this.listAlertsPaged(search, paging);
     }
 
@@ -209,26 +138,60 @@ Response (${axiosError.response?.status ?? ''}): ${JSON.stringify(axiosError.res
       url.searchParams.set('sort', paging.sort);
     }
 
-    try {
-      const response = await axios.get<IListAlertsResponse>(url.href, {
-        headers: {
-          Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
+    const response = await this.send({
+      method: 'GET',
+      url,
+      action: 'listing alerts',
+    });
 
-          'Content-Type': 'application/json',
-        },
-      });
+    return (await parseResponseBody(response)) as IListAlertsResponse;
+  }
 
-      return response.data;
-    } catch (ex) {
-      const axiosError = ex as AxiosError;
-      if (!axiosError.isAxiosError) {
-        throw ex;
-      }
+  private async send({ method, url, action, body }: ILibratoRequest, allowedErrorStatuses: number[] = []): Promise<Response> {
+    const response = await fetch(url, {
+      method,
+      headers: {
+        Authorization: `Basic ${Buffer.from(`${this.email}:${this.token}`).toString('base64')}`,
 
-      throw new Error(`Error listing alerts:
-Request: GET ${url.toString()}
+        'Content-Type': 'application/json',
+      },
+      body: body === undefined ? undefined : JSON.stringify(body),
+    });
 
-Response (${axiosError.response?.status ?? ''}): ${JSON.stringify(axiosError.response?.data, null, 1)}`);
+    if (!response.ok && !allowedErrorStatuses.includes(response.status)) {
+      const requestDetails = body === undefined ? '' : `\n${JSON.stringify(body, null, 1)}`;
+
+      throw new Error(`Error ${action}:
+Request: ${method} ${url.toString()}${requestDetails}
+
+Response (${response.status}): ${await formatResponseBody(response)}`);
     }
+
+    return response;
+  }
+}
+
+async function formatResponseBody(response: Response): Promise<string> {
+  const text = await response.text();
+
+  try {
+    return JSON.stringify(JSON.parse(text), null, 1);
+  } catch {
+    return text;
+  }
+}
+
+// Librato responds 204 No Content for some successful requests (eg. PUT /v1/metrics/:name when the metric
+// already exists), so an unconditional response.json() would throw on the empty body.
+async function parseResponseBody(response: Response): Promise<unknown> {
+  const text = await response.text();
+  if (!text) {
+    return undefined;
+  }
+
+  try {
+    return JSON.parse(text);
+  } catch {
+    return text;
   }
 }

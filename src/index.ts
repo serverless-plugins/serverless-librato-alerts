@@ -1,10 +1,11 @@
-import * as _ from 'lodash';
+import { isDeepStrictEqual } from 'node:util';
 
 import { LibratoService } from './libratoService.js';
 import type { ICreateMetric } from './types/config/ICreateMetric.js';
 import type { IGlobalLibratoAlertSettings, ILibratoAboveBelowCondition, ILibratoAbsentCondition, PartialAlert } from './types/config/index.js';
 import type { IServerlessHooks, IServerlessInstance, IServerlessOptions } from './types/index.js';
 import type { CreateAlertCondition, IAlertAttributes, IAlertResponse, ICreateAlertRequest, ICreateMetricRequest, ITag, IUpdateAlertRequest, UpdateCondition } from './types/librato/index.js';
+import { isJsonEqual, kebabCase, lowerFirst, snakeCase, upperFirst } from './utils.js';
 
 interface IReplaceTemplatesOptions {
   input: string;
@@ -79,17 +80,17 @@ class LibratoAlertIndex {
       .replace(/\$\(([A-Za-z]+) ([A-Z_a-z-]+)\)/g, (_match: string, modifier: string, value: string) => {
         switch (modifier) {
           case 'kebabCase':
-            return _.kebabCase(value);
+            return kebabCase(value);
           case 'snakeCase':
-            return _.snakeCase(value);
+            return snakeCase(value);
           case 'lowerFirst':
-            return _.lowerFirst(value);
+            return lowerFirst(value);
           case 'toLower':
-            return _.toLower(value);
+            return value.toLowerCase();
           case 'upperFirst':
-            return _.upperFirst(value);
+            return upperFirst(value);
           case 'toUpper':
-            return _.toUpper(value);
+            return value.toUpperCase();
           default:
             return value;
         }
@@ -282,7 +283,7 @@ class LibratoAlertIndex {
     });
     this.serverless.cli.log(`Info: Fetching existing librato alerts... Search text: ${existingAlertSearchText}`);
     const existingAlerts = await libratoService.listAlerts(existingAlertSearchText);
-    const existingAlertsByName = _.keyBy(existingAlerts, 'name');
+    const existingAlertsByName: Record<string, IAlertResponse> = Object.fromEntries(existingAlerts.map((existingAlert) => [existingAlert.name, existingAlert]));
 
     const alertsToAdd: ICreateAlertRequest[] = [];
     const alertsToUpdate: IUpdateAlertRequest[] = [];
@@ -308,9 +309,8 @@ class LibratoAlertIndex {
       if (added && alertConfiguration.conditions) {
         for (const condition of alertConfiguration.conditions) {
           if (typeof condition.metric === 'string') {
-            const exists = _.some(metricsToAdd, {
-              name: condition.metric,
-            });
+            const metricName = condition.metric;
+            const exists = metricsToAdd.some((metric) => metric.name === metricName);
 
             if (!exists) {
               metricsToAdd.push({
@@ -320,9 +320,8 @@ class LibratoAlertIndex {
               });
             }
           } else if (condition.metric.create !== false) {
-            const exists = _.some(metricsToAdd, {
-              name: condition.metric.name,
-            });
+            const metricName = condition.metric.name;
+            const exists = metricsToAdd.some((metric) => metric.name === metricName);
 
             if (!exists) {
               metricsToAdd.push({
@@ -340,31 +339,26 @@ class LibratoAlertIndex {
     for (const existingAlert of existingAlerts) {
       if (!existingAlertsByName[existingAlert.name]) {
         this.serverless.cli.log(`Info: Deleting librato alert: ${existingAlert.id} - ${existingAlert.name}`);
-        // eslint-disable-next-line no-await-in-loop
         await libratoService.deleteAlert(existingAlert.id);
       }
     }
 
     for (const metricRequest of metricsToAdd) {
       this.serverless.cli.log(`Info: Checking if metric exists: ${metricRequest.name}`);
-      // eslint-disable-next-line no-await-in-loop
       const existingMetric = await libratoService.retrieveMetric(metricRequest.name);
       if (!existingMetric) {
         this.serverless.cli.log(`Info: Creating new metric: ${metricRequest.name}`);
-        // eslint-disable-next-line no-await-in-loop
         await libratoService.createMetric(metricRequest);
       }
     }
 
     for (const alertRequest of alertsToAdd) {
       this.serverless.cli.log(`Info: Creating librato alert: ${alertRequest.name}`);
-      // eslint-disable-next-line no-await-in-loop
       await libratoService.createAlert(alertRequest);
     }
 
     for (const alertRequest of alertsToUpdate) {
       this.serverless.cli.log(`Info: Updating librato alert: ${alertRequest.id} - ${alertRequest.name}`);
-      // eslint-disable-next-line no-await-in-loop
       await libratoService.updateAlert(alertRequest);
     }
   }
@@ -376,20 +370,18 @@ class LibratoAlertIndex {
     for (const condition of alertConfigurationConditions) {
       const createCondition = this.getCreateAlertCondition(condition);
 
-      const existingCondition = _.find(existingAlert.conditions, {
-        metric_name: createCondition.metric_name,
-        type: createCondition.type,
-        duration: createCondition.duration,
-      });
+      const existingCondition = existingAlert.conditions.find(
+        (alertCondition) => alertCondition.metric_name === createCondition.metric_name && alertCondition.type === createCondition.type && alertCondition.duration === createCondition.duration,
+      );
 
-      if (existingCondition && !_.find(conditions, { id: existingCondition.id })) {
+      if (existingCondition && !conditions.some((updateCondition) => 'id' in updateCondition && updateCondition.id === existingCondition.id)) {
         const mergedCondition = {
           ...existingCondition,
           ...createCondition,
         };
         conditions.push(mergedCondition);
 
-        hasNewCondition = hasNewCondition || !_.isMatch(existingCondition, mergedCondition) || !_.isMatch(mergedCondition, existingCondition);
+        hasNewCondition = hasNewCondition || !isJsonEqual(existingCondition, mergedCondition);
       } else {
         conditions.push(createCondition);
         hasNewCondition = true;
@@ -426,9 +418,12 @@ class LibratoAlertIndex {
       request.description === existingAlert.description &&
       (!request.rearm_seconds || request.rearm_seconds === existingAlert.rearm_seconds) &&
       hasNewCondition &&
-      ((!request.attributes && !existingAlert.attributes) || _.isEqual(request.attributes, existingAlert.attributes)) &&
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      ((!request.services && !existingAlert.services) || _.isEqual(_.sortBy(request.services), _.sortBy(_.map(existingAlert.services, 'id'))));
+      ((!request.attributes && !existingAlert.attributes) || isJsonEqual(request.attributes, existingAlert.attributes)) &&
+      ((!request.services && !existingAlert.services) ||
+        isDeepStrictEqual(
+          [...(request.services ?? [])].sort((first, second) => first - second),
+          existingAlert.services.map((service) => service.id).sort((first, second) => first - second),
+        ));
 
     if (isEqual) {
       return null;

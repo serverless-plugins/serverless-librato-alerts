@@ -16,7 +16,7 @@ Template strings can contain the following tokens:
 | `$[serviceName]`  | Name of service (service.name)                                                                                                                          |
 | `$[stage]`        | Name of the stage. Value obtained in this order: --stage CLI option, config.stage, provider.stage, or default to `dev`                                  |
 | `$[functionName]` | Name of function                                                                                                                                        |
-| `$[functionId]`   | Logical id of the function. This is the name of the function with `-` replaced with `Dash`, `_` replaced with `Underscore`, and `Function` suffix added |
+| `$[functionId]`   | Logical ID of the function. This is the name of the function with `-` replaced with `Dash`, `_` replaced with `Underscore`, and `Function` suffix added |
 | `$[alertName]`    | Name of alert                                                                                                                                           |
 | `$[env:<name>]`   | Access an environment variable value (will not decode SSM parameter store references)                                                                   |
 
@@ -24,8 +24,8 @@ Template strings can contain the following function tokens:
 
 | Function Token          | Description                                                                 |
 | ----------------------- | --------------------------------------------------------------------------- |
-| `$(camelCase <value>)`  | Converts `<value>` to camel case                                            |
-| `$(kebabCase <value>)`  | Converts `<value>` to kebab case                                            |
+| `$(camelCase <value>)`  | Converts `<value>` to camelCase                                             |
+| `$(kebabCase <value>)`  | Converts `<value>` to kebab-case                                            |
 | `$(lowerFirst <value>)` | Converts the first character of `<value>` to lower case                     |
 | `$(toLower <value>)`    | Converts `<value>`, as a whole, to lower case just like String#toLowerCase. |
 | `$(upperFirst <value>)` | Converts the first character of `<value>` to upper case                     |
@@ -37,7 +37,7 @@ Template strings can contain the following function tokens:
 service: foo
 provider:
   name: aws
-  runtime: nodejs20.x
+  runtime: nodejs22.x
 
 custom:
   libratoAlerts:

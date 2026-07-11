@@ -1,0 +1,4 @@
+# Code formatting is handled by oxfmt (vp check). This config only keeps the
+# org-level super-linter's prettier checks (e.g. JSONC_PRETTIER) in agreement
+# with oxfmt's quote style.
+singleQuote: true
